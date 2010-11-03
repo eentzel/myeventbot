@@ -14,7 +14,9 @@ import settings
 import logging
 import uuid
 
-class User(db.Model):
+GCAL_FEED = 'https://www.google.com/calendar/feeds/default/private/full'
+
+class EmailUser(db.Model):
     # the email address that the user sends events to:
     email_address = db.StringProperty()
     # the AuthSub token used to authenticate the user to gcal:
@@ -35,11 +37,11 @@ class RegistrationHandler(webapp.RequestHandler):
         if session_token == None:
             logging.error("Couldn't upgrade to session token")
             return
-        user = User()
-        user.email_address = str(uuid.uuid4())
-        user.auth_token = str(session_token)
-        user.put()
-        template_values = { 'email_address': user.email_address }
+        myuser = EmailUser()
+        myuser.email_address = str(uuid.uuid4())
+        myuser.auth_token = str(session_token)
+        myuser.put()
+        template_values = { 'email_address': myuser.email_address }
         path = os.path.join(os.path.dirname(__file__), 'success.html')
         self.response.out.write(template.render(path, template_values))            
 
@@ -56,7 +58,7 @@ class MainHandler(webapp.RequestHandler):
         gdata.alt.appengine.run_on_appengine(client)
         return client.GenerateAuthSubURL(
             next_url,
-            ('https://www.google.com/calendar/feeds/default/private/full',),
+            (GCAL_FEED,),
             secure=False, session=True)
 
 
