@@ -46,6 +46,21 @@ class RegistrationHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))            
 
     
+class AddEventHandler(webapp.RequestHandler):
+    def get(self):
+        client = gdata.service.GDataService()
+        gdata.alt.appengine.run_on_appengine(client)
+        all_users = EmailUser.gql("ORDER BY date_added DESC LIMIT 1")
+        for my_user in all_users:
+            token = my_user.auth_token
+        client.SetAuthSubToken(token, [GCAL_FEED])
+        xml_data = """<entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
+                          <content type="html">Tennis at Hyland Feb 11 3p-3:30</content>
+                          <gCal:quickadd value="true"/>
+                      </entry>"""
+        response = client.Post(xml_data, GCAL_FEED)
+        self.response.out.write(response)
+
 class MainHandler(webapp.RequestHandler):
     def get(self):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
@@ -66,6 +81,7 @@ class MainHandler(webapp.RequestHandler):
 
 def main():
     application = webapp.WSGIApplication([('/', MainHandler),
+                                          ('/make_an_event', AddEventHandler),
                                           ('/register', RegistrationHandler)],
                                          debug=True)
     util.run_wsgi_app(application)
