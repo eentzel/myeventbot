@@ -18,7 +18,7 @@ class RegistrationHandler(webapp.RequestHandler):
             logging.error("Couldn't extract one-time auth token from URL")
             return
         session_token = google_api.permanent_token_from_temp_token(temp_token)
-        myuser = EmailUser(auth_token=str(session_token))
+        myuser = EmailUser(auth_token=session_token.get_token_string())
         myuser.put()
         template_values = { 'email_address': myuser.email_address }
         path = os.path.join(os.path.dirname(__file__), 'success.html')
@@ -29,7 +29,7 @@ class AddEventHandler(webapp.RequestHandler):
     def get(self):
         all_users = EmailUser.gql("ORDER BY date_added DESC LIMIT 1")
         for my_user in all_users:
-            token_str = my_user.auth_token.split('=')[1]
+            token_str = my_user.auth_token
         response = google_api.quickadd_event_using_token('Tennis at Hyland Feb 11 3p-3:30', token_str)
         self.response.out.write(response)
 
