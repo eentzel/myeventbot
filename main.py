@@ -5,7 +5,6 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
-from google.appengine.ext import db
 import os
 import atom.url
 import gdata.service
@@ -13,15 +12,9 @@ import gdata.alt.appengine
 import settings
 import logging
 import uuid
+from ecal_users import EmailUser
 
 GCAL_FEED = 'https://www.google.com/calendar/feeds/default/private/full'
-
-class EmailUser(db.Model):
-    # the email address that the user sends events to:
-    email_address = db.StringProperty()
-    # the AuthSub token used to authenticate the user to gcal:
-    auth_token = db.StringProperty()
-    date_added = db.DateTimeProperty(auto_now_add=True)
 
 
 class RegistrationHandler(webapp.RequestHandler):
