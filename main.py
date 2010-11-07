@@ -7,7 +7,6 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 import os
 import logging
-import uuid
 import google_api
 from ecal_users import EmailUser
 
@@ -19,9 +18,7 @@ class RegistrationHandler(webapp.RequestHandler):
             logging.error("Couldn't extract one-time auth token from URL")
             return
         session_token = google_api.permanent_token_from_temp_token(temp_token)
-        myuser = EmailUser()
-        myuser.email_address = str(uuid.uuid4())
-        myuser.auth_token = str(session_token)
+        myuser = EmailUser(auth_token=str(session_token))
         myuser.put()
         template_values = { 'email_address': myuser.email_address }
         path = os.path.join(os.path.dirname(__file__), 'success.html')
