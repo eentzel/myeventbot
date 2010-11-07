@@ -53,7 +53,11 @@ class AddEventHandler(webapp.RequestHandler):
         all_users = EmailUser.gql("ORDER BY date_added DESC LIMIT 1")
         for my_user in all_users:
             token = my_user.auth_token
+        logging.info('setting token to')
+        logging.info(token)
         client.SetAuthSubToken(token, [GCAL_FEED])
+        logging.info('current_token is')
+        logging.info(client.current_token)
         xml_data = """<entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
                           <content type="html">Tennis at Hyland Feb 11 3p-3:30</content>
                           <gCal:quickadd value="true"/>
