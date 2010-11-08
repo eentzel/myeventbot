@@ -24,11 +24,17 @@ class RegistrationHandler(webapp.RequestHandler):
     
 class AddEventHandler(webapp.RequestHandler):
     def get(self):
-        all_users = EmailUser.gql("ORDER BY date_added DESC LIMIT 1")
-        for my_user in all_users:
-            token_str = my_user.auth_token
-        response = google_api.quickadd_event_using_token('Tennis at Hyland Feb 11 3p-3:30', token_str)
-        self.response.out.write(response)
+        email = self.request.get('email')
+        query = EmailUser.gql("WHERE email_address = :email", email=email)
+        try:
+            current_user = query.fetch(1)[0]
+            response = google_api.quickadd_event_using_token('Tennis at Hyland Feb 11 3p-3:30',
+                                                             current_user.auth_token)
+            self.response.out.write(response)
+        except IndexError:
+            path = os.path.join(os.path.dirname(__file__), 'error.html')
+            template_values = { 'error_text': "Unable to find email address: %s" % email }
+            self.response.out.write(template.render(path, template_values))
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
