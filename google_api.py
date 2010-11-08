@@ -18,8 +18,11 @@ def generate_auth_link():
     return client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=False, session=True)
 
 def temp_token_from_url(url):
-    return gdata.auth.extract_auth_sub_token_from_url(url)
-    
+    token = gdata.auth.extract_auth_sub_token_from_url(url)
+    if token == None:
+        throw Exception("Couldn't extract one-time auth token from URL")
+    return token
+
 def permanent_token_from_temp_token(temp_token):
     session_token = None
     client = get_client()

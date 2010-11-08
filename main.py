@@ -14,9 +14,6 @@ from ecal_users import EmailUser
 class RegistrationHandler(webapp.RequestHandler):
     def get(self):
         temp_token = google_api.temp_token_from_url(self.request.uri)
-        if temp_token == None:
-            logging.error("Couldn't extract one-time auth token from URL")
-            return
         session_token = google_api.permanent_token_from_temp_token(temp_token)
         myuser = EmailUser(auth_token=session_token.get_token_string())
         myuser.put()
