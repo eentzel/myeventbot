@@ -21,20 +21,6 @@ class RegistrationHandler(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'success.html')
         self.response.out.write(template.render(path, template_values))            
 
-    
-class AddEventHandler(webapp.RequestHandler):
-    def get(self):
-        email = self.request.get('email')
-        query = EmailUser.gql("WHERE email_address = :email", email=email)
-        try:
-            current_user = query.fetch(1)[0]
-            response = google_api.quickadd_event_using_token('Tennis at Hyland Feb 11 3p-3:30',
-                                                             current_user.auth_token)
-            self.response.out.write(response)
-        except IndexError:
-            path = os.path.join(os.path.dirname(__file__), 'error.html')
-            template_values = { 'error_text': "Unable to find email address: %s" % email }
-            self.response.out.write(template.render(path, template_values))
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
@@ -45,7 +31,6 @@ class MainHandler(webapp.RequestHandler):
 
 def main():
     application = webapp.WSGIApplication([('/', MainHandler),
-                                          ('/make_an_event', AddEventHandler),
                                           ('/register', RegistrationHandler)],
                                          debug=True)
     util.run_wsgi_app(application)
