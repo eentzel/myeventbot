@@ -6,7 +6,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 import os
-import logging
 import google_api
 from ecal_users import EmailUser
 
