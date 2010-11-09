@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Welcome to eCal</title>
-    </head>
-    <body>
-        <h1>Welcome to eCal</h1>
+{% extends "base.html" %}
 
-        <p>eCal is a service that allows you to create events in your
-            Google Calendar by sending an email.</p>
-        <p>If you have a Google Calendar account, <a href="{{ auth_link }}">click
-            here</a> to get started.  If you don't have a account, you
-            can create one at
-            the <a href="http://calendar.google.com/">Google Calendar
-            site</a>.</p>
-    </body>
-</html>
+{% block h1 %}Welcome to eCal{% endblock %}
+
+{% block content %}
+    <p>
+        eCal is a service that allows you to create events in your Google Calendar by sending an email.
+    </p>
+    <p>
+        If you have a Google Calendar account, <a href="{{ auth_link }}">click here</a> to get started.
+        If you don't have a account, you can create one at the <a href="http://calendar.google.com/">Google Calendar site</a>.
+    </p>
+{% endblock %}
