@@ -4,8 +4,21 @@
 {% block h1 %}You've successfully registered for EventBot!{% endblock %}
 
 {% block content %}
-    <p>You can create events in your Google Calendar by sending an
-    email to {{email_address}}@myeventbot.appspot.com.  <strong>Be sure to keep
-    this address a secret &mdash; anyone who sees it can use it to
-    create events in your calendar.</strong></p>
+  <p>
+      Your EventBot email address has been created!
+      You can add events to your Google Calendar by sending an email to {{email_address}}@myeventbot.appspot.com.
+      Be sure to keep this address a secret &mdash; anyone who knows it can use it to create events in your calendar.
+  </p>
+  <p>
+      Put your event description in the subject line in plain English, e.g., "Lunch with Bob Friday 12:30".
+      The event description can contain anything supported by Google
+      Calendar's <a href="http://www.google.com/support/calendar/bin/answer.py?hl=en&answer=36604">Quick
+      Add</a> feature.
+  </p>
+  <p>
+      Right now the body of your email is ignored.  We plan to add
+      more capabilities to EventBot over time, so follow @TODO on
+      Twitter to see what's new.  We'd also love to hear your
+      suggestions via Twitter or <a href="mailto:TODO">email</a>.
+  </p>
 {% endblock %}
