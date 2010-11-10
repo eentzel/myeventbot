@@ -24,3 +24,4 @@ class EmailUser(db.Model):
     # the AuthSub token used to authenticate the user to gcal:
     auth_token = db.StringProperty()
     date_added = db.DateTimeProperty(auto_now_add=True)
+    last_action = db.DateTimeProperty(auto_now_add=True)
