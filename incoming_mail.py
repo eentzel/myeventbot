@@ -6,6 +6,7 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from gdata.service import RequestError
 import logging
 import urllib
 from ecal_users import EmailUser
@@ -35,7 +36,7 @@ class CreateEventHandler(InboundMailHandler):
             return
         try:
             response = google_api.quickadd_event_using_token(message.subject, token)
-        except RequestError as err:
+        except RequestError, err:
             if err.status == 401:
                 logging.info("it looks like you've revoked your token")
             else:
