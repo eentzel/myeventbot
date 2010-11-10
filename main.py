@@ -31,7 +31,7 @@ class MainHandler(webapp.RequestHandler):
 def main():
     application = webapp.WSGIApplication([('/', MainHandler),
                                           ('/register', RegistrationHandler)],
-                                         debug=True)
+                                         debug = (os.environ['SERVER_NAME'] == 'localhost') )
     util.run_wsgi_app(application)
 
 
