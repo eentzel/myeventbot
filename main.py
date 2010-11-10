@@ -8,7 +8,6 @@ from google.appengine.ext.webapp import template
 import os
 import google_api
 from ecal_users import EmailUser
-import settings
 
 
 class RegistrationHandler(webapp.RequestHandler):
@@ -17,7 +16,7 @@ class RegistrationHandler(webapp.RequestHandler):
         session_token = google_api.permanent_token_from_temp_token(temp_token)
         myuser = EmailUser(auth_token=session_token.get_token_string())
         myuser.put()
-        template_values = { 'email_address': myuser.email_address + '@' + settings.HOST_NAME }
+        template_values = { 'email_address': myuser.email_address + '@' + os.environ['APPLICATION_ID'] + '.appspotmail.com' }
         path = os.path.join(os.path.dirname(__file__), 'success.html')
         self.response.out.write(template.render(path, template_values))            
 

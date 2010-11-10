@@ -14,7 +14,7 @@ import google_api
 
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
-    # /_ah/mail/89c33b71-b5a3-4e0a-bbb3-8283d337cbca%40myeventbot.appspot.com
+    # /_ah/mail/89c33b71-b5a3-4e0a-bbb3-8283d337cbca%40myeventbot.appspotmail.com
     def __get_email_address(self):
         decoded_path = urllib.unquote(self.request.path)
         return decoded_path.replace('/_ah/mail/', '')
