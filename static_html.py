@@ -10,6 +10,7 @@ import os
 
 class StaticHandler(webapp.RequestHandler):
     def get(self, path):
+        self.response.headers['Cache-Control'] = 'public, max-age=14400'
         full_path = os.path.join(os.path.dirname(__file__), path)
         self.response.out.write(template.render(full_path, None))
 
