@@ -8,6 +8,7 @@ from google.appengine.ext.webapp import template
 import os
 import google_api
 from ecal_users import EmailUser
+from ecal_wsgi import EcalWSGIApplication
 
 
 class RegistrationHandler(webapp.RequestHandler):
@@ -25,8 +26,7 @@ class RegistrationHandler(webapp.RequestHandler):
 
 
 def main():
-    application = webapp.WSGIApplication([('/register', RegistrationHandler)],
-                                         debug = (os.environ['SERVER_NAME'] == 'localhost') )
+    application = EcalWSGIApplication([('/register', RegistrationHandler)])
     util.run_wsgi_app(application)
 
 

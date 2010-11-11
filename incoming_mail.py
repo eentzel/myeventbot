@@ -3,7 +3,7 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 
-from google.appengine.ext import webapp
+from ecal_wsgi import EcalWSGIApplication
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from gdata.service import RequestError
@@ -51,7 +51,7 @@ class CreateEventHandler(InboundMailHandler):
 
 
 def main():
-    application = webapp.WSGIApplication([CreateEventHandler.mapping()], debug=True)
+    application = EcalWSGIApplication([CreateEventHandler.mapping()])
     run_wsgi_app(application)
 
 if __name__ == "__main__":

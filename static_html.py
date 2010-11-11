@@ -7,6 +7,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 import os
 import google_api
+from ecal_wsgi import EcalWSGIApplication
 
 
 class StaticHandler(webapp.RequestHandler):
@@ -21,8 +22,7 @@ class StaticHandler(webapp.RequestHandler):
 
 
 def main():
-    application = webapp.WSGIApplication([(r'/(.*)', StaticHandler)],
-                                         debug = (os.environ['SERVER_NAME'] == 'localhost'))
+    application = EcalWSGIApplication([(r'/(.*)', StaticHandler)])
     util.run_wsgi_app(application)
 
 
