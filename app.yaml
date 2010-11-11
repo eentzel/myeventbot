@@ -10,6 +10,8 @@ handlers:
   script: incoming_mail.py
 - url: /.*\.html
   script: static_html.py
+- url: /
+  script: static_html.py
 - url: /static
   static_dir:  static
 - url: .*

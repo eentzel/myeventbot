@@ -24,16 +24,8 @@ class RegistrationHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))            
 
 
-class MainHandler(webapp.RequestHandler):
-    def get(self):
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
-        template_values = { 'auth_link': google_api.generate_auth_link() }
-        self.response.out.write(template.render(path, template_values))
-
-
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler),
-                                          ('/register', RegistrationHandler)],
+    application = webapp.WSGIApplication([('/register', RegistrationHandler)],
                                          debug = (os.environ['SERVER_NAME'] == 'localhost') )
     util.run_wsgi_app(application)
 

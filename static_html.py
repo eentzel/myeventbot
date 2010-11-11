@@ -6,13 +6,18 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 import os
+import google_api
 
 
 class StaticHandler(webapp.RequestHandler):
     def get(self, path):
+        global_template_vals = None
         self.response.headers['Cache-Control'] = 'public, max-age=14400'
+        if path == "":
+            path = "index.html"
+            global_template_vals = { 'auth_link': google_api.generate_auth_link() }
         full_path = os.path.join(os.path.dirname(__file__), path)
-        self.response.out.write(template.render(full_path, None))
+        self.response.out.write(template.render(full_path, global_template_vals))
 
 
 def main():
