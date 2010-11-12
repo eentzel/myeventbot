@@ -18,7 +18,7 @@ def get_client():
 def generate_auth_link():
     next_url = atom.url.Url('http', settings.HOST_NAME, path='/register')
     client = get_client()
-    return client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=True, session=True)
+    return client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=(not debug), session=True)
 
 def temp_token_from_url(url):
     return gdata.auth.extract_auth_sub_token_from_url(url, rsa_key=rsa_key)
@@ -31,7 +31,10 @@ def permanent_token_from_temp_token(temp_token):
 
 def quickadd_event_using_token(event, token_str):
     client = get_client()
-    token = gdata.auth.SecureAuthSubToken(rsa_key)
+    if debug:
+        token = gdata.auth.AuthSubToken()
+    else:
+        token = gdata.auth.SecureAuthSubToken(rsa_key)
     token.set_token_string(token_str)
     client.current_token = token
     xml_data = """<entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
