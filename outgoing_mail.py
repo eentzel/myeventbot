@@ -8,7 +8,7 @@ from google.appengine.ext.webapp import template
 import os
 
 
-from_address = 'admin@' + os.environ['APPLICATION_ID'] + '.appspotmail.com'
+from_address = 'EventBot <admin@' + os.environ['APPLICATION_ID'] + '.appspotmail.com>'
 
 
 def send(to, template_name, values):
