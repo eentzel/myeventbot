@@ -52,10 +52,10 @@ class CreateEventHandler(InboundMailHandler):
 
     def receive(self, message):
         current_user = self.__get_user()
-        token = current_user.auth_token
-        if token == None:
+        if current_user == None:
             logging.info("can't find user with that email address")
             return
+        token = current_user.auth_token
         try:
             response = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
