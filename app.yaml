@@ -12,8 +12,8 @@ handlers:
   script: static_html.py
 - url: /static
   static_dir:  static
-- url: .*
-  script: main.py
+- url: /register
+  script: registration.py
 
 inbound_services:
 - mail
