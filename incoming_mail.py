@@ -12,6 +12,8 @@ import urllib
 from datetime import datetime
 from ecal_users import EmailUser
 import google_api
+import outgoing_mail
+import re
 
 
 class CreateEventHandler(InboundMailHandler):
@@ -30,6 +32,24 @@ class CreateEventHandler(InboundMailHandler):
         except IndexError:
             return None
 
+    @staticmethod
+    def __format_date(str):
+        """Format a date from GCal into a user-friendly string.
+
+        >>> CreateEventHandler.__format_date("2011-02-11T15:00:00.000-07:00")
+        'Fri Feb 11 03:00 PM'
+        >>> CreateEventHandler.__format_date("2011-06-11T15:20:12.000-06:00")
+        'Sat Jun 11 03:20 PM'
+        """
+        # TODO: Remove leading zero from hour
+        str = re.sub(r".000-.*$", "", str)
+        try:
+            date = datetime.strptime(str, "%Y-%m-%dT%H:%M:%S")
+            return date.strftime("%a %b %e %I:%M %p")
+        except ValueError:
+            date = datetime.strptime(str, "%Y-%m-%d")            
+            return date.strftime("%a %b %e")
+
     def receive(self, message):
         current_user = self.__get_user()
         token = current_user.auth_token
@@ -46,10 +66,11 @@ class CreateEventHandler(InboundMailHandler):
             return
         current_user.last_action = datetime.now()
         current_user.put()
-        logging.info('event creation succeeded: ')
-        logging.info( response.GetHtmlLink().href )
-        logging.info( response.FindExtensions(tag='when')[0].attributes['startTime'] )
-        logging.info( response.title.text )
+        start_time = response.FindExtensions(tag='when')[0].attributes['startTime']
+        outgoing_mail.send(message.sender, 'event_created',
+                           { 'link': response.GetHtmlLink().href,
+                             'when': self.__format_date(start_time),
+                             'title': response.title.text } )
 
 
 def main():

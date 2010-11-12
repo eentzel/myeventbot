@@ -1,0 +1,4 @@
+{% filter wordwrap:76 %}
+EventBot has added the event "{{title}}" to your Google Calendar for {{when}}.  You can view the event here:
+{% endfilter %}
+{{link}}
