@@ -8,6 +8,10 @@ import os
 GCAL_FEED = 'https://www.google.com/calendar/feeds/default/private/full'
 rsa_key = None
 debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')
+if not debug:
+    f = open(os.path.join(os.path.dirname(__file__), 'myrsakey.pem'))
+    rsa_key = f.read()
+    f.close()
 
 
 def get_client():
@@ -42,13 +46,3 @@ def quickadd_event_using_token(event, token_str):
                       <gCal:quickadd value="true"/>
                   </entry>""" % (event)
     return client.Post(xml_data, GCAL_FEED)
-
-def main():
-    global rsa_key
-    if not debug and rsa_key == None:
-        f = open(os.path.join(os.path.dirname(__file__), 'myrsakey.pem'))
-        rsa_key = f.read()
-        f.close()
-
-if __name__ == "__main__":
-    main()
