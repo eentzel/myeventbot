@@ -47,7 +47,9 @@ class CreateEventHandler(InboundMailHandler):
         current_user.last_action = datetime.now()
         current_user.put()
         logging.info('event creation succeeded: ')
-        logging.info( response.GetHtmlLink() )
+        logging.info( response.GetHtmlLink().href )
+        logging.info( response.FindExtensions(tag='when')[0].attributes['startTime'] )
+        logging.info( response.title.text )
 
 
 def main():
