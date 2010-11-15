@@ -53,7 +53,11 @@ class CreateEventHandler(InboundMailHandler):
     def receive(self, message):
         current_user = self.__get_user()
         if current_user == None:
-            logging.info("can't find user with that email address")
+            adr = self.__get_email_address()
+            outgoing_mail.send(message.sender, 'no_such_address',
+                               { 'address': adr,
+                                 'subject': message.subject })
+            logging.warn("Couldn't send mail to user with address " + adr)
             return
         token = current_user.auth_token
         try:
