@@ -14,6 +14,7 @@ handlers:
   static_dir:  static
 - url: /register
   script: registration.py
+  secure: always
 
 inbound_services:
 - mail

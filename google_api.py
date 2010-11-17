@@ -20,7 +20,7 @@ def get_client():
     return client
     
 def generate_auth_link():
-    next_url = atom.url.Url('http', settings.HOST_NAME, path='/register')
+    next_url = atom.url.Url('https', settings.HOST_NAME, path='/register')
     client = get_client()
     return client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=(not debug), session=True)
 
