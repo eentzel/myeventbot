@@ -3,6 +3,7 @@ import gdata.service
 import gdata.alt.appengine
 import settings
 import os
+from xml.sax.saxutils import escape
 
 
 GCAL_FEED = 'https://www.google.com/calendar/feeds/default/private/full'
@@ -48,7 +49,7 @@ def quickadd_event_using_token(event, token_str):
     xml_data = """<entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
                       <content type="html">%s</content>
                       <gCal:quickadd value="true"/>
-                  </entry>""" % (event)
+                  </entry>""" % escape(event)
     return client.Post(xml_data, GCAL_FEED)
 
 def delete_event_using_token(event_url, token_str):
