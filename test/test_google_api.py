@@ -8,7 +8,7 @@ class TempTokenFromUrl(unittest.TestCase):
     def testToken(self):
         url = 'https://myeventbot.appspot.com/register?auth_sub_scopes=https://www.google.com/calendar/feeds/default/private/full&token=1/RuM6SMYS9qDY3oUW-rO9EJlNXOvagzEKo6u0lRld758'
         result =  google_api.temp_token_from_url(url)
-        self.assertTrue(hasattr(result, rsa_key))
+        self.assertEqual(not google_api.debug, hasattr(result, 'rsa_key'))
         self.assertEqual(result.get_token_string(), '1/RuM6SMYS9qDY3oUW-rO9EJlNXOvagzEKo6u0lRld758')
 
 class AddEvent(unittest.TestCase):
