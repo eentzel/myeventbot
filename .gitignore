@@ -1,2 +1,6 @@
 .DS_Store
 *.pyc
+# beacuse CSS files are all generated from .less files:
+*.css
+# because it contains private credentials:
+test_token.txt

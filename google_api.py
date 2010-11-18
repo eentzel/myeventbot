@@ -50,3 +50,7 @@ def quickadd_event_using_token(event, token_str):
                       <gCal:quickadd value="true"/>
                   </entry>""" % (event)
     return client.Post(xml_data, GCAL_FEED)
+
+def delete_event_using_token(event_url, token_str):
+    client = get_client_with_token(token_str)
+    return client.Delete(event_url)

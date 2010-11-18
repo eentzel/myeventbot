@@ -15,6 +15,9 @@ handlers:
 - url: /register
   script: registration.py
   secure: always
+- url: /test.*
+  script: gaeunit.py
+  login: admin
 
 inbound_services:
 - mail
