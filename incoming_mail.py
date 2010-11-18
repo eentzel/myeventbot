@@ -19,12 +19,12 @@ import re
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
     # /_ah/mail/89c33b71-b5a3-4e0a-bbb3-8283d337cbca%40myeventbot.appspotmail.com
-    def __get_email_address(self):
+    def _get_email_address(self):
         decoded_path = urllib.unquote(self.request.path)
         return decoded_path.replace('/_ah/mail/', '')
 
-    def __get_user(self):
-        local_part = self.__get_email_address().split('@')[0]
+    def _get_user(self):
+        local_part = self._get_email_address().split('@')[0]
         query = EmailUser.gql("WHERE email_address = :email", email=local_part)
         try:
             current_user = query.fetch(1)[0]
@@ -33,12 +33,12 @@ class CreateEventHandler(InboundMailHandler):
             return None
 
     @staticmethod
-    def __format_date(str):
+    def _format_date(str):
         """Format a date from GCal into a user-friendly string.
 
-        >>> CreateEventHandler.__format_date("2011-02-11T15:00:00.000-07:00")
+        >>> CreateEventHandler._format_date("2011-02-11T15:00:00.000-07:00")
         'Fri Feb 11 03:00 PM'
-        >>> CreateEventHandler.__format_date("2011-06-11T15:20:12.000-06:00")
+        >>> CreateEventHandler._format_date("2011-06-11T15:20:12.000-06:00")
         'Sat Jun 11 03:20 PM'
         """
         # TODO: Remove leading zero from hour
@@ -51,9 +51,9 @@ class CreateEventHandler(InboundMailHandler):
             return date.strftime("%a %b %e")
 
     def receive(self, message):
-        current_user = self.__get_user()
+        current_user = self._get_user()
         if current_user == None:
-            adr = self.__get_email_address()
+            adr = self._get_email_address()
             outgoing_mail.send(message.sender, 'no_such_address',
                                { 'address': adr,
                                  'subject': message.subject })
@@ -73,7 +73,7 @@ class CreateEventHandler(InboundMailHandler):
         start_time = response.FindExtensions(tag='when')[0].attributes['startTime']
         outgoing_mail.send(message.sender, 'event_created',
                            { 'link': response.GetHtmlLink().href,
-                             'when': self.__format_date(start_time),
+                             'when': self._format_date(start_time),
                              'title': response.title.text } )
 
 
