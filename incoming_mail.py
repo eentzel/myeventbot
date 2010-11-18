@@ -57,7 +57,7 @@ class CreateEventHandler(InboundMailHandler):
             outgoing_mail.send(message.sender, 'no_such_address',
                                { 'address': adr,
                                  'subject': message.subject })
-            logging.warn("Couldn't send mail to user with address " + adr)
+            logging.warn("Couldn't create event for user with address " + adr)
             return
         token = current_user.auth_token
         try:
