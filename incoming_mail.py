@@ -63,6 +63,18 @@ class SuccessHandler(FeedbackHandler):
                  'when': CreateEventHandler._format_date(start_time),
                  'title': self.event.title.text }
 
+    
+class TokenRevokedHandler(FeedbackHandler):
+    template_name = 'token_revoked'
+    def __init__(self, message, adr):
+        self.message = message
+        self.adr = adr
+        self.warning = "Token for address " + self.adr + " doesn't appear to be valid anymore"
+
+    def values(self):
+        return { 'address': self.adr,
+                 'subject': self.message.subject }
+        
         
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
@@ -108,7 +120,7 @@ class CreateEventHandler(InboundMailHandler):
             event = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
             if err.args[0]['status'] == 401:
-                logging.info("it looks like you've revoked your token")
+                TokenRevokedHandler(message, self._get_email_address()).send()
             else:
                 logging.info("couldn't create event")
             return
