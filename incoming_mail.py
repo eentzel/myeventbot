@@ -107,7 +107,7 @@ class CreateEventHandler(InboundMailHandler):
         try:
             event = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
-            if err.status == 401:
+            if err.args[0]['status'] == 401:
                 logging.info("it looks like you've revoked your token")
             else:
                 logging.info("couldn't create event")
