@@ -34,9 +34,10 @@ class FeedbackHandler(object):
         try:
             outgoing_mail.send(self.message.sender, self.template_name,
                                self.values())
-        except:
-            logging.warn("unable to send email to %s using template %s" %
+        except Exception, err:
+            logging.error("unable to send email to %s using template %s" %
                          (self.message.sender, self.template_name))
+            logging.error(err)
 
 
 class NoSuchAddressHandler(FeedbackHandler):
