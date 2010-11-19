@@ -61,7 +61,7 @@ class CreateEventHandler(InboundMailHandler):
             return
         token = current_user.auth_token
         try:
-            response = google_api.quickadd_event_using_token(message.subject, token)
+            event = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
             if err.status == 401:
                 logging.info("it looks like you've revoked your token")
@@ -70,11 +70,11 @@ class CreateEventHandler(InboundMailHandler):
             return
         current_user.last_action = datetime.now()
         current_user.put()
-        start_time = response.FindExtensions(tag='when')[0].attributes['startTime']
+        start_time = event.FindExtensions(tag='when')[0].attributes['startTime']
         outgoing_mail.send(message.sender, 'event_created',
-                           { 'link': response.GetHtmlLink().href,
+                           { 'link': event.GetHtmlLink().href,
                              'when': self._format_date(start_time),
-                             'title': response.title.text } )
+                             'title': event.title.text } )
 
 
 def main():
