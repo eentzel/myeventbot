@@ -16,6 +16,54 @@ import outgoing_mail
 import re
 
 
+class FeedbackHandler(object):
+    """Abstract class to send email feedback to the user that their
+    event creation succeeded/failed.
+
+    Swallows all exceptions so that the HTTP request that GAE sends us
+    for incoming mail doesn't throw a 500 error -- if it did, GAE
+    would keep retrying and creating duplicate events.
+
+    Subclasses must implement a values() method and a template_name
+    attribute.  Subclasses can optionally implement a warning
+    attribute, which will be logged.
+    """
+    def send(self):
+        if hasattr(self, 'warning'):
+            logging.warn(self.warning)        
+        try:
+            outgoing_mail.send(self.message.sender, self.template_name,
+                               self.values())
+        except:
+            logging.warn("unable to send email to %s using template %s" %
+                         (self.message.sender, self.template_name))
+
+
+class NoSuchAddressHandler(FeedbackHandler):
+    template_name = 'no_such_address'
+    def __init__(self, message, adr):
+        self.message = message
+        self.adr = adr
+        self.warning = "Couldn't create event for user with address " + self.adr
+        
+    def values(self):
+        return { 'address': self.adr,
+                 'subject': self.message.subject }
+
+
+class SuccessHandler(FeedbackHandler):
+    template_name = 'event_created'
+    def __init__(self, message, event):
+        self.message = message
+        self.event = event
+
+    def values(self):
+        start_time = self.event.FindExtensions(tag='when')[0].attributes['startTime']
+        return { 'link': self.event.GetHtmlLink().href,
+                 'when': CreateEventHandler._format_date(start_time),
+                 'title': self.event.title.text }
+
+        
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
     # /_ah/mail/89c33b71-b5a3-4e0a-bbb3-8283d337cbca%40myeventbot.appspotmail.com
@@ -53,11 +101,7 @@ class CreateEventHandler(InboundMailHandler):
     def receive(self, message):
         current_user = self._get_user()
         if current_user == None:
-            adr = self._get_email_address()
-            outgoing_mail.send(message.sender, 'no_such_address',
-                               { 'address': adr,
-                                 'subject': message.subject })
-            logging.warn("Couldn't create event for user with address " + adr)
+            NoSuchAddressHandler(message, self._get_email_address()).send()
             return
         token = current_user.auth_token
         try:
@@ -70,11 +114,7 @@ class CreateEventHandler(InboundMailHandler):
             return
         current_user.last_action = datetime.now()
         current_user.put()
-        start_time = event.FindExtensions(tag='when')[0].attributes['startTime']
-        outgoing_mail.send(message.sender, 'event_created',
-                           { 'link': event.GetHtmlLink().href,
-                             'when': self._format_date(start_time),
-                             'title': event.title.text } )
+        SuccessHandler(message, event).send()
 
 
 def main():
