@@ -35,6 +35,8 @@ class FeedbackHandler(object):
             outgoing_mail.send(self.message.sender, self.template_name,
                                self.values())
         except Exception, err:
+            # TODO: should use logging.exception -- see:
+            # http://code.google.com/appengine/articles/python/recording_exceptions_with_ereporter.html
             logging.error("unable to send email to %s using template %s" %
                          (self.message.sender, self.template_name))
             logging.error(err)
