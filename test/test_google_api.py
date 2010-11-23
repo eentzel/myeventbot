@@ -17,6 +17,7 @@ class AddEvent(unittest.TestCase):
     f.close()
 
     def setUp(self):
+        #  TODO: test event names with chars that need XML escaping ('&', '<', etc.)
         self.event = google_api.quickadd_event_using_token('Lunch with Bob Friday at 12', AddEvent.test_token)
 
     def testValidEvent(self):
