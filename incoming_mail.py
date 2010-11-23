@@ -105,6 +105,7 @@ class CreateEventHandler(InboundMailHandler):
         'Sat Jun 11 03:20 PM'
         """
         # TODO: Remove leading zero from hour
+        # TODO: Remove leading space from day of month
         str = re.sub(r".000-.*$", "", str)
         try:
             date = datetime.strptime(str, "%Y-%m-%dT%H:%M:%S")
