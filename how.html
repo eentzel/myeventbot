@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}How Does it Work?{% endblock %}
+{% block h1 %}How Does it Work?{% endblock %}
+
+{% block content %}
+<p>
+    After you authorize EventBot to access your Google Calendar
+    account, EventBot will create a unique, unguessable email address
+    for you (something like IW8VNVdWxg@myeventbot.appspotmail.com).
+</p>
+<p>
+    Remember this address (by adding it to your address book or
+    contacts in your email program, for example).  Any time you send
+    an email to this address, EventBot will try to interpret the
+    subject line as an event description and create that event in your
+    Google Calendar.
+</p>
+<p>
+    EventBot never knows your Google Calendar username and password.
+    All we store is a "token" from Google that can be used to create
+    events on your calendar.  EventBot will never use this token
+    except in response to emails you send to your personal EventBot
+    address.  You can also revoke this token at any time (for example
+    if someone else gets hold of your personal EventBot address, or
+    you want to stop using EventBot) from
+    your <a href="https://www.google.com/accounts/IssuedAuthSubTokens">Google
+    Account</a> page.
+</p>
+{% endblock %}
