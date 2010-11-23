@@ -11,12 +11,19 @@ from ecal_wsgi import EcalWSGIApplication
 
 
 class StaticHandler(webapp.RequestHandler):
+    def canonical(self, path):
+        if os.environ['SERVER_PORT'] == '443':
+            server = 'https://' + os.environ['APPLICATION_ID'] + 'appspot.com'
+        else:
+            server = 'http://' + os.environ['SERVER_NAME']
+        return server + '/' + path
+
     def get(self, path):
-        global_template_vals = None
+        global_template_vals = {'canonical': self.canonical(path)}
         self.response.headers['Cache-Control'] = 'public, max-age=14400'
         if path == "":
             path = "index.html"
-            global_template_vals = { 'auth_link': google_api.generate_auth_link() }
+            global_template_vals.update({'auth_link': google_api.generate_auth_link()})
         full_path = os.path.join(os.path.dirname(__file__), path)
         self.response.out.write(template.render(full_path, global_template_vals))
 
