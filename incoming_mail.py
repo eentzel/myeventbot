@@ -97,13 +97,7 @@ class CreateEventHandler(InboundMailHandler):
 
     @staticmethod
     def _format_date(str):
-        """Format a date from GCal into a user-friendly string.
-
-        >>> CreateEventHandler._format_date("2011-02-11T15:00:00.000-07:00")
-        'Fri Feb 11 03:00 PM'
-        >>> CreateEventHandler._format_date("2011-06-11T15:20:12.000-06:00")
-        'Sat Jun 11 03:20 PM'
-        """
+        """Format a date from GCal into a user-friendly string."""
         # TODO: Remove leading zero from hour
         # TODO: Remove leading space from day of month
         str = re.sub(r".000-.*$", "", str)
