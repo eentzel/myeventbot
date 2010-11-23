@@ -2,16 +2,28 @@
 <html>
     <head>
         <title>EventBot: {% block title %}Home{% endblock %}</title>
+        <link rel="stylesheet" href="/static/eventbot.css" type="text/css" />
         <link rel="canonical" href="{{ canonical }}" />
         {% block robots %}{% endblock %}
     </head>
     <body>
-        <h1>{% block h1 %}Welcome to EventBot!{% endblock %}</h1>
-        {% block content %}
-            <p>
-                EventBot is a service that allows you to create events in your
-                Google Calendar by sending an email.
+        <div id="content">
+            <img src="/static/logo.jpg" class="logo" alt="EventBot: Personal Calendar Assistant" />
+            <ul id="navigation">
+                <li>{% block nav-home %}<a href="/">Home</a>{% endblock %}</li>
+                <li>{% block nav-how %}<a href="/how.html">How Does it Work?</a>{% endblock %}</li>
+                <li>{% block nav-twitter %}<a href="http://twitter.com/myeventbot">Twitter</a>{% endblock %}</li>
+            </ul>
+            {% block h1 %}{% endblock %}
+            {% block content %}
+                <p>
+                    EventBot is a service that allows you to create events in your
+                    Google Calendar by sending an email.
+                </p>
+            {% endblock %}
+            <p id="footer">
+                Copyright &copy;2010 Eric Entzel.  Logo by <a href="http://laksmanv.weebly.com/">Laksman Veeravagu</a>.
             </p>
-        {% endblock %}
+        </div>
     </body>
 </html>

@@ -1,0 +1,52 @@
+@logo_gray: #ccc;
+@logo_blue: #52b9c9;
+@logo_black: #424242;
+
+html, body {
+    font-size: 18px;
+    color: @logo_black;
+    font-family: georgia, serif;
+}
+
+a {
+    color: @logo_blue;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.logo {
+    width: 323px;
+    height: 121px;
+    display: block;
+    margin: 0 auto;
+}
+
+#content {
+    width: 960px;
+    margin: 0 auto;
+}
+
+#navigation, #footer {
+    border-top: 2px solid @logo_gray;
+    border-bottom: 2px solid @logo_gray;
+    text-align: center;
+    padding: 3px 0;
+}
+
+#navigation li {
+    list-style-type: none;
+    display: inline;
+    padding: 0 16px;
+}
+
+#navigation li .active {
+    font-weight: bold;
+}
+
+#footer {
+    font-size: 12px;
+}
