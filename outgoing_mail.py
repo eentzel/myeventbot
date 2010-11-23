@@ -8,7 +8,7 @@ from google.appengine.ext.webapp import template
 import os
 
 
-from_address = '"EventBot" <theeventbot@gmail.com>'
+from_address = '"EventBot" <admin@myeventbot.com>'
 
 
 def send(to, template_name, values):
