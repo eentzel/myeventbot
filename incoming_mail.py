@@ -81,7 +81,7 @@ class TokenRevokedHandler(FeedbackHandler):
         
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
-    # /_ah/mail/89c33b71-b5a3-4e0a-bbb3-8283d337cbca%40myeventbot.appspotmail.com
+    # /_ah/mail/f832ofhAau%40myeventbot.appspotmail.com
     def _get_email_address(self):
         decoded_path = urllib.unquote(self.request.path)
         return decoded_path.replace('/_ah/mail/', '')
