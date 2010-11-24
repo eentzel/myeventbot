@@ -27,6 +27,7 @@ class AddEvent(unittest.TestCase):
     f.close()
 
     def setUp(self):
+        # note that event title contains chars that must be XML-escaped
         self.event = google_api.quickadd_event_using_token('Two & Two are < Eight Friday at 12', AddEvent.test_token)
 
     def testValidEvent(self):
