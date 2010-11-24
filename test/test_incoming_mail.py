@@ -2,6 +2,33 @@
 
 import unittest
 from incoming_mail import CreateEventHandler
+from ecal_users import EmailUser
+
+
+class MockRequest(object):
+    def __init__(self, path):
+        self.path = path
+
+
+class GetUser(unittest.TestCase):
+    def setUp(self):
+        self.evt_handler = CreateEventHandler()
+        self.evt_handler.initialize(MockRequest(''), None)
+        test_user = EmailUser(email_address='test_user')
+        test_user.put()
+
+    def testValidUser(self):
+        self.evt_handler.request.path = '/_ah/mail/test_user%40myeventbot.appspotmail.com'
+        result = self.evt_handler._get_user()
+        self.assertEqual(result.email_address, 'test_user')
+        self.assertTrue(hasattr(result, 'auth_token'))
+        self.assertTrue(hasattr(result, 'date_added'))
+        self.assertTrue(hasattr(result, 'last_action'))
+        
+    def testNonExistentUser(self):
+        self.evt_handler.request.path = '/_ah/mail/non_existent_user%40myeventbot.appspotmail.com'
+        result = self.evt_handler._get_user()
+        self.assertEqual(result, None)
 
 
 class FormatDate(unittest.TestCase):
