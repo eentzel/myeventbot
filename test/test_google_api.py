@@ -27,13 +27,12 @@ class AddEvent(unittest.TestCase):
     f.close()
 
     def setUp(self):
-        #  TODO: test event names with chars that need XML escaping ('&', '<', etc.)
-        self.event = google_api.quickadd_event_using_token('Lunch with Bob Friday at 12', AddEvent.test_token)
+        self.event = google_api.quickadd_event_using_token('Two & Two are < Eight Friday at 12', AddEvent.test_token)
 
     def testValidEvent(self):
         # test basic properties
         self.assertTrue(self.event.GetHtmlLink().href.startswith('https://www.google.com/calendar/event?eid='))
-        self.assertEqual(self.event.title.text, 'Lunch with Bob')
+        self.assertEqual(self.event.title.text, 'Two & Two are < Eight')
 
         # time should look like: "2011-06-11T15:20:12.000-06:00"
         start_time = self.event.FindExtensions(tag='when')[0].attributes['startTime']
