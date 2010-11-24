@@ -8,6 +8,7 @@ from google.appengine.ext.webapp import template
 import os
 import google_api
 from ecal_wsgi import EcalWSGIApplication
+from xml.sax.saxutils import escape
 
 
 class StaticHandler(webapp.RequestHandler):
@@ -23,7 +24,7 @@ class StaticHandler(webapp.RequestHandler):
         self.response.headers['Cache-Control'] = 'public, max-age=14400'
         if path == "":
             path = "index.html"
-            global_template_vals.update({'auth_link': google_api.generate_auth_link()})
+            global_template_vals.update({'auth_link': escape(google_api.generate_auth_link())})
         full_path = os.path.join(os.path.dirname(__file__), path)
         self.response.out.write(template.render(full_path, global_template_vals))
 
