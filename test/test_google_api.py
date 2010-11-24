@@ -37,8 +37,8 @@ class AddEvent(unittest.TestCase):
 
         # time should look like: "2011-06-11T15:20:12.000-06:00"
         start_time = self.event.FindExtensions(tag='when')[0].attributes['startTime']
-        self.assertTrue(re.match(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}-\d{2}:\d{2}", start_time))
         end_time = self.event.FindExtensions(tag='when')[0].attributes['endTime']
+        self.assertTrue(re.match(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}-\d{2}:\d{2}", start_time))
         self.assertTrue(re.match(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}-\d{2}:\d{2}", end_time))
 
     def tearDown(self):
