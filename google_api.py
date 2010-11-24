@@ -33,7 +33,8 @@ def get_client_with_token(token_str):
 def generate_auth_link():
     next_url = atom.url.Url('https', settings.HOST_NAME, path='/register')
     client = get_client()
-    return client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=(not debug), session=True)
+    url = client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=(not debug), session=True)
+    return str(url)
 
 def temp_token_from_url(url):
     return gdata.auth.extract_auth_sub_token_from_url(url, rsa_key=rsa_key)
