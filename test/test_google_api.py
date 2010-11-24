@@ -3,13 +3,12 @@
 import google_api
 import unittest
 import re
-import settings
-import urllib
+import os
 
 
 class AuthLink(unittest.TestCase):
     def testAuthLink(self):
-        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&hd=default&next=https%3A%2F%2F" + urllib.quote(settings.HOST_NAME) + "%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
+        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&hd=default&next=https%3A%2F%2F" + os.environ['APPLICATION_ID'] + ".appspot.com%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
         self.assertEqual(google_api.generate_auth_link(), expected)
 
 

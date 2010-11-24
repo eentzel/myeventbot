@@ -1,7 +1,6 @@
 import atom.url
 import gdata.service
 import gdata.alt.appengine
-import settings
 import os
 from xml.sax.saxutils import escape
 
@@ -31,7 +30,7 @@ def get_client_with_token(token_str):
     return client
 
 def generate_auth_link():
-    next_url = atom.url.Url('https', settings.HOST_NAME, path='/register')
+    next_url = atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/register')
     client = get_client()
     url = client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=(not debug), session=True)
     return str(url)
