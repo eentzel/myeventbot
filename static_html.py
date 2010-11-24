@@ -16,7 +16,7 @@ class StaticHandler(webapp.RequestHandler):
         if os.environ['SERVER_PORT'] == '443':
             server = 'https://' + os.environ['APPLICATION_ID'] + 'appspot.com'
         else:
-            server = 'http://' + os.environ['SERVER_NAME']
+            server = 'http://www.myeventbot.com'
         return server + '/' + path
 
     def get(self, path):
