@@ -3,6 +3,15 @@
 import google_api
 import unittest
 import re
+import settings
+import urllib
+
+
+class AuthLink(unittest.TestCase):
+    def testAuthLink(self):
+        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&hd=default&next=https%3A%2F%2F" + urllib.quote(settings.HOST_NAME) + "%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
+        self.assertEqual(google_api.generate_auth_link(), expected)
+
 
 class TempTokenFromUrl(unittest.TestCase):
     def testToken(self):
@@ -10,6 +19,7 @@ class TempTokenFromUrl(unittest.TestCase):
         result =  google_api.temp_token_from_url(url)
         self.assertEqual(not google_api.debug, hasattr(result, 'rsa_key'))
         self.assertEqual(result.get_token_string(), '1/RuM6SMYS9qDY3oUW-rO9EJlNXOvagzEKo6u0lRld758')
+
 
 class AddEvent(unittest.TestCase):
     f = open(os.path.join(os.path.dirname(__file__), 'test_token.txt'))
