@@ -37,7 +37,7 @@ a:hover {
     padding: 3px 0;
 }
 
-#navigation, h1 {
+#navigation, h1, .button {
     font-family: arial, sans-serif;
 }
     
@@ -49,6 +49,35 @@ a:hover {
 
 #navigation li .active {
     font-weight: bold;
+}
+
+.button {
+    display: block;
+    text-align: center;
+    background-color: @logo_gray;
+    border: 2px solid @logo_black;
+    color: @logo_black;
+    font-size: 36px;
+    padding: 24px;
+    width: 50%;
+    margin: 0 auto;
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 3px 3px 7px @logo_black;
+    -moz-box-shadow: 3px 3px 7px @logo_black;
+    box-shadow: 3px 3px 7px @logo_black;
+}
+
+.button span {
+    display: block;
+}
+
+.button:hover {
+    cursor: pointer;
+    text-decoration: none;
+    background-color: @logo_blue;
 }
 
 #footer {
