@@ -12,6 +12,7 @@
             <ul id="navigation">
                 <li>{% block nav-home %}<a href="/">Home</a>{% endblock %}</li>
                 <li>{% block nav-how %}<a href="/how.html">How Does it Work?</a>{% endblock %}</li>
+                <li>{% block nav-signup %}<a href="{{auth_link}}">Sign Up</a>{% endblock %}</li>
                 <li>{% block nav-twitter %}<a href="http://twitter.com/myeventbot">Twitter</a>{% endblock %}</li>
             </ul>
             {% block h1 %}{% endblock %}
