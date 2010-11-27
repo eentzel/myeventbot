@@ -46,5 +46,5 @@ class EcalWSGIApplication(webapp.WSGIApplication):
 
 class EcalRequestHandler(webapp.RequestHandler):
     def respond_with_template(self, name, values):
-        full_path = os.path.join(os.path.dirname(__file__), name)
+        full_path = os.path.join(os.path.dirname(__file__), 'templates', name)
         self.response.out.write(template.render(full_path, values))
