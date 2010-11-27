@@ -4,10 +4,10 @@ import string
 
 def make_address():
     """
-    Returns a random alphanumeric string of 10 digits.  Since there
+    Returns a random alphanumeric string of 8 digits.  Since there
     are 57 choices per digit (we exclude '0', 'O', 'l', 'I' and '1'
     for readability), this gives:
-    57 ** 10 = 3.62033331 x 10 ** 17
+    57 ** 8 = 1.11429157 x 10 ** 14
 
     possible results.  When there are a million accounts active,
     we need:
@@ -18,7 +18,7 @@ def make_address():
     """
     chars = string.letters + string.digits
     chars = chars.translate(string.maketrans('', ''), '0OlI1')
-    return ''.join([ random.choice(chars) for i in range(10) ])
+    return ''.join([ random.choice(chars) for i in range(8) ])
         
 class EmailUser(db.Model):
     # the email address that the user sends events to:
