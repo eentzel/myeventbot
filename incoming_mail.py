@@ -3,14 +3,13 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 
-from ecal_wsgi import EcalWSGIApplication
+import ecal
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from gdata.service import RequestError
 import logging
 import urllib
 from datetime import datetime
-from ecal_users import EmailUser
 import google_api
 import outgoing_mail
 import re
@@ -88,7 +87,7 @@ class CreateEventHandler(InboundMailHandler):
 
     def _get_user(self):
         local_part = self._get_email_address().split('@')[0]
-        query = EmailUser.gql("WHERE email_address = :email", email=local_part)
+        query = ecal.EcalUser.gql("WHERE email_address = :email", email=local_part)
         return query.get()
 
     @staticmethod
@@ -125,7 +124,7 @@ class CreateEventHandler(InboundMailHandler):
 
 
 def main():
-    application = EcalWSGIApplication([CreateEventHandler.mapping()])
+    application = ecal.EcalWSGIApplication([CreateEventHandler.mapping()])
     run_wsgi_app(application)
 
 if __name__ == "__main__":

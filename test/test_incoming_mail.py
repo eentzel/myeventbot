@@ -2,7 +2,7 @@
 
 import unittest
 from incoming_mail import CreateEventHandler
-from ecal_users import EmailUser
+from ecal import EcalUser
 
 
 class MockRequest(object):
@@ -14,7 +14,7 @@ class GetUser(unittest.TestCase):
     def setUp(self):
         self.evt_handler = CreateEventHandler()
         self.evt_handler.initialize(MockRequest(''), None)
-        test_user = EmailUser(email_address='test_user')
+        test_user = EcalUser(email_address='test_user')
         test_user.put()
 
     def testValidUser(self):

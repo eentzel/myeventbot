@@ -7,7 +7,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 import os
 import google_api
-from ecal_wsgi import EcalWSGIApplication
+import ecal
 from xml.sax.saxutils import escape
 
 
@@ -32,7 +32,7 @@ class StaticHandler(webapp.RequestHandler):
 
 
 def main():
-    application = EcalWSGIApplication([(r'/(.*)', StaticHandler)])
+    application = ecal.EcalWSGIApplication([(r'/(.*)', StaticHandler)])
     util.run_wsgi_app(application)
 
 

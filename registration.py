@@ -8,8 +8,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.runtime import apiproxy_errors
 import os
 import google_api
-from ecal_users import EmailUser
-from ecal_wsgi import EcalWSGIApplication
+import ecal
 
 
 class RegistrationHandler(webapp.RequestHandler):
@@ -27,7 +26,7 @@ class RegistrationHandler(webapp.RequestHandler):
             self.redirect("/")
             return
         session_token = google_api.permanent_token_from_temp_token(temp_token)
-        myuser = EmailUser(auth_token=session_token.get_token_string())
+        myuser = ecal.EcalUser(auth_token=session_token.get_token_string())
         try:
             myuser.put()
         except apiproxy_errors.CapabilityDisabledError:
@@ -39,7 +38,7 @@ class RegistrationHandler(webapp.RequestHandler):
 
 
 def main():
-    application = EcalWSGIApplication([('/register', RegistrationHandler)])
+    application = ecal.EcalWSGIApplication([('/register', RegistrationHandler)])
     util.run_wsgi_app(application)
 
 

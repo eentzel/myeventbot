@@ -1,6 +1,14 @@
+#!/usr/bin/env python
+#
+# Copyright 2010 Eric Entzel <eric@ubermac.net>
+#
+
 from google.appengine.ext import db
 import random
 import string
+from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
+import os
 
 def make_address():
     """
@@ -19,11 +27,18 @@ def make_address():
     chars = string.letters + string.digits
     chars = chars.translate(string.maketrans('', ''), '0OlI1')
     return ''.join([ random.choice(chars) for i in range(8) ])
-        
-class EmailUser(db.Model):
+
+
+class EcalUser(db.Model):
     # the email address that the user sends events to:
     email_address = db.StringProperty(default=make_address())
     # the AuthSub token used to authenticate the user to gcal:
     auth_token = db.StringProperty()
     date_added = db.DateTimeProperty(auto_now_add=True)
     last_action = db.DateTimeProperty(auto_now_add=True)
+
+
+class EcalWSGIApplication(webapp.WSGIApplication):
+    def __init__(self, url_mapping):
+        debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')
+        super(EcalWSGIApplication, self).__init__(url_mapping, debug)
