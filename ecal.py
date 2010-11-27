@@ -42,3 +42,9 @@ class EcalWSGIApplication(webapp.WSGIApplication):
     def __init__(self, url_mapping):
         debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')
         super(EcalWSGIApplication, self).__init__(url_mapping, debug)
+
+
+class EcalRequestHandler(webapp.RequestHandler):
+    def respond_with_template(self, name, values):
+        full_path = os.path.join(os.path.dirname(__file__), name)
+        self.response.out.write(template.render(full_path, values))
