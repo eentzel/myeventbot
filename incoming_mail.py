@@ -93,15 +93,16 @@ class CreateEventHandler(InboundMailHandler):
     @staticmethod
     def _format_date(str):
         """Format a date from GCal into a user-friendly string."""
-        # TODO: Remove leading zero from hour
-        # TODO: Remove leading space from day of month
         str = re.sub(r".000-.*$", "", str)
         try:
             date = datetime.strptime(str, "%Y-%m-%dT%H:%M:%S")
-            return date.strftime("%a %b %e %I:%M %p")
+            retval = date.strftime("%a %b %e %I:%M %p")
         except ValueError:
             date = datetime.strptime(str, "%Y-%m-%d")            
-            return date.strftime("%a %b %e")
+            retval = date.strftime("%a %b %e")
+        retval = retval.replace('  ', ' ')
+        retval = retval.replace(' 0', ' ')
+        return retval
 
     def receive(self, message):
         current_user = self._get_user()
