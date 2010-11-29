@@ -29,7 +29,9 @@ class FeedbackHandler(object):
     """
     def send(self):
         if hasattr(self, 'warning'):
-            logging.warn(self.warning)        
+            logging.warn(self.warning)
+            logging.info("Sender: " + self.message.sender)
+            logging.info("Subject: " + self.message.subject)
         try:
             outgoing_mail.send(self.message.sender, self.template_name,
                                self.values())
