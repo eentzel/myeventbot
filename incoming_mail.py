@@ -109,8 +109,7 @@ class CreateEventHandler(InboundMailHandler):
     def receive(self, message):
         current_user = self._get_user()
         if current_user == None:
-            pass
-            # NoSuchAddressHandler(message, self._get_email_address()).send()
+            NoSuchAddressHandler(message, self._get_email_address()).send()
             return
         token = current_user.auth_token
         # TODO: everything after this point should move into a task queue
