@@ -93,7 +93,7 @@ class CreateEventHandler(InboundMailHandler):
     @staticmethod
     def _format_date(str):
         """Format a date from GCal into a user-friendly string."""
-        str = re.sub(r".000-.*$", "", str)
+        str = re.sub(r".000[-+].*$", "", str)
         try:
             date = datetime.strptime(str, "%Y-%m-%dT%H:%M:%S")
             retval = date.strftime("%a %b %e %I:%M %p")
