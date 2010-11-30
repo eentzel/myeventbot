@@ -8,6 +8,8 @@ import random
 import string
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from xml.sax.saxutils import escape
+import google_api
 import os
 
 
@@ -47,6 +49,21 @@ class EcalWSGIApplication(webapp.WSGIApplication):
 
 
 class EcalRequestHandler(webapp.RequestHandler):
+    def canonical(self, path):
+        if os.environ['SERVER_PORT'] == '443':
+            server = 'https://' + os.environ['APPLICATION_ID'] + 'appspot.com'
+        else:
+            server = 'http://www.myeventbot.com'
+        return server + '/' + path
+
+    def global_template_vals(self):
+        return {
+            'canonical': self.canonical(self.request.path),
+            'auth_link': escape(google_api.generate_auth_link())
+            }
+    
     def respond_with_template(self, name, values):
         full_path = os.path.join(os.path.dirname(__file__), 'templates', name)
-        self.response.out.write(template.render(full_path, values))
+        all_values = self.global_template_vals()
+        all_values.update(values)
+        self.response.out.write(template.render(full_path, all_values))

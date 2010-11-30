@@ -3,29 +3,15 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 from google.appengine.ext.webapp import util
-import os
-import google_api
 import ecal
-from xml.sax.saxutils import escape
 
 
 class StaticHandler(ecal.EcalRequestHandler):
-    def canonical(self, path):
-        if os.environ['SERVER_PORT'] == '443':
-            server = 'https://' + os.environ['APPLICATION_ID'] + 'appspot.com'
-        else:
-            server = 'http://www.myeventbot.com'
-        return server + '/' + path
-
     def get(self, path):
-        global_template_vals = {
-            'canonical': self.canonical(path),
-            'auth_link': escape(google_api.generate_auth_link())
-        }
         self.response.headers['Cache-Control'] = 'public, max-age=14400'
         if path == "":
             path = "index.html"
-        self.respond_with_template(path, global_template_vals)
+        self.respond_with_template(path, {})
 
 
 def main():
