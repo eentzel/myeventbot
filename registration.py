@@ -21,7 +21,7 @@ class RegistrationHandler(ecal.EcalRequestHandler):
         except apiproxy_errors.CapabilityDisabledError:
             template_values = {
                 'title': 'Unable to create account',
-                'error_text': "We couldn't create your account right now because the database is in read-only mode for maintenance.  Please try back in a few minutes."
+                'error_text': "We couldn't create your account right now because the database is in read-only mode for maintenance.  Please try again in a few minutes."
                 }
             self.respond_with_template('error.html', template_values)
             return
