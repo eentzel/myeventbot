@@ -48,8 +48,3 @@ class EcalRequestHandler(webapp.RequestHandler):
     def respond_with_template(self, name, values):
         full_path = os.path.join(os.path.dirname(__file__), 'templates', name)
         self.response.out.write(template.render(full_path, values))
-
-
-class EcalTask(db.Model):
-    event_id = db.StringProperty()
-    url = db.StringProperty()
