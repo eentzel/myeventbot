@@ -36,11 +36,8 @@ class FeedbackHandler(object):
         try:
             outgoing_mail.send(recipient, self.template_name, self.values())                
         except Exception, err:
-            # TODO: should use logging.exception -- see:
-            # http://code.google.com/appengine/articles/python/recording_exceptions_with_ereporter.html
-            logging.error("unable to send email to %s using template %s" %
-                         (recipient, self.template_name))
-            logging.error(err)
+            logging.exception("unable to send email to %s using template %s" %
+                              (recipient, self.template_name))
 
 
 class NoSuchAddressHandler(FeedbackHandler):
@@ -119,7 +116,7 @@ class CreateEventHandler(InboundMailHandler):
             if err.args[0]['status'] == 401:
                 TokenRevokedHandler(message, self._get_email_address()).send()
             else:
-                logging.info("couldn't create event")
+                logging.exception("couldn't create event")
             return
         current_user.last_action = datetime.now()
         current_user.put()
