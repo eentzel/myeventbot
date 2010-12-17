@@ -402,7 +402,8 @@ def generate_auth_sub_url(next, scopes, secure=False, session=True,
     request_url.params['secure'] = 1
   else:
     request_url.params['secure'] = 0
-  request_url.params['hd'] = domain
+  if domain is not None:
+    request_url.params['hd'] = domain
   return request_url
 
 

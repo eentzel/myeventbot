@@ -33,7 +33,11 @@ def generate_auth_link():
     next_url = atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/register')
     client = get_client()
     # TODO: this is setting an 'hd' parameter, which prevents people from signing up with GApps
-    url = client.GenerateAuthSubURL(next_url, GCAL_FEED, secure=(not debug), session=True)
+    url = client.GenerateAuthSubURL(next_url,
+                                    GCAL_FEED,
+                                    secure=(not debug),
+                                    session=True,
+                                    domain=None)
     return str(url)
 
 def temp_token_from_url(url):
