@@ -4,3 +4,5 @@
 *.css
 # because it contains private credentials:
 test_token.txt
+# because shell scripts are for local use, not for App Engine
+*.sh
