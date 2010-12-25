@@ -63,6 +63,9 @@ class EcalRequestHandler(webapp.RequestHandler):
             }
     
     def respond_with_template(self, name, values):
+        # TODO: use posixpath.normalize() or some form of whitelisting
+        # see http://lucumr.pocoo.org/2010/12/24/common-mistakes-as-web-developer/
+        # unit test that 'GET /asdf/../foo.html' and similar return 404
         full_path = os.path.join(os.path.dirname(__file__), 'templates', name)
         all_values = self.global_template_vals()
         all_values.update(values)
