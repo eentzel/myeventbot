@@ -1,5 +1,5 @@
 application: myeventbot
-version: DO_NOT_DEPLOY_MANUALLY
+version: testing
 runtime: python
 api_version: 1
 
