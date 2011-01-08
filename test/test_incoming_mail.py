@@ -62,7 +62,7 @@ class FormatDate(unittest.TestCase):
     invalid = ("2011-06-11T15:20:12.00",             # too few digits in microseconds
                "2011-13-11T15:20:12.000-06:00",      # non-existent month
                "2011-04-31T15:20:12.000-06:00",      # non-existent day
-               "2011-13-11T15:20:12.000-06:00",      # February 31st
+               "2011-02-31T15:20:12.000-06:00",      # February 31st
                "2011-06-11C15:20:12.000-06:00",      # wrong TZ separator
                "this is not even remotely a date")   # nonsense
 
