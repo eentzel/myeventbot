@@ -116,6 +116,9 @@ class CreateEventHandler(InboundMailHandler):
             if err.args[0]['status'] == 401:
                 TokenRevokedHandler(message, self._get_email_address()).send()
             else:
+                # TODO: should probably re-raise the exception,
+                # otherwise RequestErrors other than 401 will silently
+                # fail to create the event
                 logging.exception("couldn't create event")
             return
         current_user.last_action = datetime.now()
