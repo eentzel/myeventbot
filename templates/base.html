@@ -14,8 +14,8 @@
             <ul id="navigation">
                 <li>{% block nav-home %}<a href="/">Home</a>{% endblock %}</li>
                 <li>{% block nav-how %}<a href="/how.html">How Does it Work?</a>{% endblock %}</li>
+                <li>{% block nav-blog %}<a href="http://blog.myeventbot.com">Blog</a>{% endblock %}</li>
                 <li>{% block nav-signup %}<a href="{{auth_link}}">Sign Up</a>{% endblock %}</li>
-                <li>{% block nav-twitter %}<a href="http://twitter.com/myeventbot">Twitter</a>{% endblock %}</li>
             </ul>
             {% block h1 %}{% endblock %}
             {% block content %}
@@ -24,9 +24,17 @@
                     Google Calendar by sending an email.
                 </p>
             {% endblock %}
-            <p id="footer">
-                Copyright &copy;2010 Eric Entzel.  Logo by <a href="http://www.veeravagu.com/">Laksman Veeravagu</a>.
-            </p>
+            <div id="footer">
+                <p>
+                    Copyright &copy;2010 Eric Entzel.
+                    Logo by <a href="http://www.veeravagu.com/">Laksman Veeravagu</a>.
+                </p>
+                <p>
+                    Feedback? Contact us by
+                    <a href="mailto:admin@myeventbot.com">email</a> or
+                    <a href="http://twitter.com/myeventbot">Twitter</a>.
+                </p>
+            </div>
         </div>
     </body>
 </html>
