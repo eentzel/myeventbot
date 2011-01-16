@@ -104,6 +104,9 @@ class CreateEventHandler(InboundMailHandler):
         return retval
 
     def receive(self, message):
+        logging.info("Receiving Subject: " + message.subject)
+        logging.info("Receiving original Subject: " +
+                     message.original['Subject'])
         current_user = self._get_user()
         if current_user == None:
             NoSuchAddressHandler(message, self._get_email_address()).send()
