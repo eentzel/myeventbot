@@ -24,6 +24,14 @@ handlers:
 - url: /test.*
   script: gaeunit.py
   login: admin
+- url: /dashboard
+  script: dashboard.py
+  login: admin
+
+admin_console:
+  pages:
+  - name: Dashboard
+    url: /dashboard
 
 skip_files:
 - ^(.*/)?app\.yaml
