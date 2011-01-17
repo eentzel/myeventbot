@@ -51,7 +51,8 @@ def permanent_token_from_temp_token(temp_token):
 
 def quickadd_event_using_token(event, token_str):
     client = get_client_with_token(token_str)
-    xml_data = """<entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
+    xml_data = """<?xml version='1.0' encoding='utf-8'?>
+                  <entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
                       <content type="html">%s</content>
                       <gCal:quickadd value="true"/>
                   </entry>""" % escape(event)
