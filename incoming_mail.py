@@ -139,11 +139,11 @@ class CreateEventHandler(InboundMailHandler):
             NoSuchAddressHandler(message, self._get_email_address()).send()
             return
         token = current_user.auth_token
-        subject = CreateEventHandler.header_to_utf8(message.subject)
-        logging.info("Decoded Subject: " + subject)
+        message.subject = CreateEventHandler.header_to_utf8(message.subject)
+        logging.info("Decoded Subject: " + message.subject)
         # TODO: everything after this point should move into a task queue
         try:
-            event = google_api.quickadd_event_using_token(subject, token)
+            event = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
             if err.args[0]['status'] == 401:
                 TokenRevokedHandler(message, self._get_email_address()).send()
