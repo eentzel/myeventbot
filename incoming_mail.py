@@ -7,6 +7,7 @@ import ecal
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from gdata.service import RequestError
+from email.header import decode_header
 import logging
 import urllib
 from datetime import datetime
@@ -103,6 +104,27 @@ class CreateEventHandler(InboundMailHandler):
         retval = retval.replace(' 0', ' ')
         return retval
 
+    @staticmethod
+    def header_to_unicode(header):
+        """It appears that GAE does not decode rfc2047-encoded headers
+        for us, so we have to do it manually.  Up to three steps may
+        be needed:
+            1) quoted-printable or base64 decoding, performed by decode_header()
+            2) character set (e.g., utf-8 or iso-8859-1) decoding, performed by decode()
+            3) conversion into Unicode, performed by unicode()
+        """
+        raw = decode_header(header)
+        retval = []
+        for part in raw:
+            value = part[0]
+            charset = part[1]
+            if charset:
+                value = value.decode(charset)
+            if not isinstance(value, unicode):
+                value = unicode(value)
+            retval.append(value)
+        return ''.join(retval)
+
     def receive(self, message):
         logging.info("Receiving Subject: " + message.subject)
         logging.info("Receiving original Subject: " +
@@ -112,9 +134,11 @@ class CreateEventHandler(InboundMailHandler):
             NoSuchAddressHandler(message, self._get_email_address()).send()
             return
         token = current_user.auth_token
+        subject = CreateEventHandler.header_to_unicode(message.subject)
+        logging.info("Decoded Subject: " + subject)
         # TODO: everything after this point should move into a task queue
         try:
-            event = google_api.quickadd_event_using_token(message.subject, token)
+            event = google_api.quickadd_event_using_token(subject, token)
         except RequestError, err:
             if err.args[0]['status'] == 401:
                 TokenRevokedHandler(message, self._get_email_address()).send()
