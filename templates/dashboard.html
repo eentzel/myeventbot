@@ -1,11 +1,17 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard{% endblock %}
-{% block description %}Admin dashboard for EventBot{% endblock %}
-{% block h1 %}<h1>Dashboard</h1>{% endblock %}
-
-{% block content %}
-<p>
-    New signups today: {{signups}}
-</p>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <title>EventBot: Dashboard</title>
+        <meta name="robots" content="noindex" />
+        <meta name="description" content="Admin dashboard for EventBot" />
+    </head>
+    <body>
+        <div id="content">
+            <h1>Dashboard</h1>
+            <p>
+                New signups today: {{signups}}
+            </p>
+        </div>
+    </body>
+</html>
