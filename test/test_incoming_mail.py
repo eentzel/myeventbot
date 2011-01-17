@@ -32,35 +32,35 @@ class GetUser(unittest.TestCase):
         self.assertEqual(result, None)
 
 
-class HeaderToUnicode(unittest.TestCase):
+class HeaderToUTF8(unittest.TestCase):
     valid = ( # From the first user to encounter this bug:
               ("=?UTF-8?B?MjAxMTAwNDEgLSBWaW9sYSAtIEV2ZW50Ym90IHRlc3Qgc2VudCB3aXRoIGZpbGVtYWtlciBTTVRQIDEvMTcvMjAxMSB1bnRpbCAxLzIwLzIwMTE=?=",
                "20110041 - Viola - Eventbot test sent with filemaker SMTP 1/17/2011 until 1/20/2011"),
 
               # From rfc2047:
-              ("=?iso-8859-1?q?this=20is=20some=20text?=", u"this is some text"),
-              ("=?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>", u"Keith Moore<moore@cs.utk.edu>"),
-              ("=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>", u'Keld Jørn Simonsen<keld@dkuug.dk>'),
-              ("=?ISO-8859-1?Q?Andr=E9?= Pirard <PIRARD@vm1.ulg.ac.be>", u'AndréPirard <PIRARD@vm1.ulg.ac.be>'),
+              ("=?iso-8859-1?q?this=20is=20some=20text?=", "this is some text"),
+              ("=?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>", "Keith Moore<moore@cs.utk.edu>"),
+              ("=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>", 'Keld Jørn Simonsen<keld@dkuug.dk>'),
+              ("=?ISO-8859-1?Q?Andr=E9?= Pirard <PIRARD@vm1.ulg.ac.be>", 'AndréPirard <PIRARD@vm1.ulg.ac.be>'),
               ("=?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?=\n=?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=",
                u'If you can read this you understand the example.'),
-              ("=?ISO-8859-1?Q?Olle_J=E4rnefors?= <ojarnef@admin.kth.se>", u'Olle Järnefors<ojarnef@admin.kth.se>'),
-              ("=?ISO-8859-1?Q?Patrik_F=E4ltstr=F6m?= <paf@nada.kth.se>", u'Patrik Fältström<paf@nada.kth.se>'),
+              ("=?ISO-8859-1?Q?Olle_J=E4rnefors?= <ojarnef@admin.kth.se>", 'Olle Järnefors<ojarnef@admin.kth.se>'),
+              ("=?ISO-8859-1?Q?Patrik_F=E4ltstr=F6m?= <paf@nada.kth.se>", 'Patrik Fältström<paf@nada.kth.se>'),
 
               # My test cases:
-              ("This has encoded =?iso-8859-1?q?stuff?= in the middle", u"This has encodedstuffin the middle"),
-              ("This has encoded =?iso-8859-1?q?=20stuff=20?= in the middle", u"This has encoded stuff in the middle"),
+              ("This has encoded =?iso-8859-1?q?stuff?= in the middle", "This has encodedstuffin the middle"),
+              ("This has encoded =?iso-8859-1?q?=20stuff=20?= in the middle", "This has encoded stuff in the middle"),
               ("Not encoded at all", "Not encoded at all"),
 
               # Empty string
               ("", ""),
 
               # From Python's email.header docs:
-              ('=?iso-8859-1?q?p=F6stal?=', u"pöstal") )
+              ('=?iso-8859-1?q?p=F6stal?=', "pöstal") )
 
     def testValid(self):
         for input, expected in self.valid:
-            self.assertEqual(CreateEventHandler.header_to_unicode(input), expected)
+            self.assertEqual(CreateEventHandler.header_to_utf8(input), expected)
 
 
 class FormatDate(unittest.TestCase):

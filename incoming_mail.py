@@ -105,7 +105,7 @@ class CreateEventHandler(InboundMailHandler):
         return retval
 
     @staticmethod
-    def header_to_unicode(header):
+    def header_to_utf8(header):
         """It appears that GAE does not decode rfc2047-encoded headers
         for us, so we have to do it manually.  Up to three steps may
         be needed:
@@ -120,10 +120,8 @@ class CreateEventHandler(InboundMailHandler):
             charset = part[1]
             if charset:
                 value = value.decode(charset)
-            if not isinstance(value, unicode):
-                value = unicode(value)
             retval.append(value)
-        return ''.join(retval)
+        return ''.join(retval).encode('utf-8')
 
     def receive(self, message):
         logging.info("Receiving Subject: " + message.subject)
@@ -134,7 +132,7 @@ class CreateEventHandler(InboundMailHandler):
             NoSuchAddressHandler(message, self._get_email_address()).send()
             return
         token = current_user.auth_token
-        subject = CreateEventHandler.header_to_unicode(message.subject)
+        subject = CreateEventHandler.header_to_utf8(message.subject)
         logging.info("Decoded Subject: " + subject)
         # TODO: everything after this point should move into a task queue
         try:
