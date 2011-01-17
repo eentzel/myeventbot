@@ -111,7 +111,7 @@ class CreateEventHandler(InboundMailHandler):
         be needed:
             1) quoted-printable or base64 decoding, performed by decode_header()
             2) character set (e.g., utf-8 or iso-8859-1) decoding, performed by decode()
-            3) conversion into Unicode, performed by unicode()
+            3) conversion into UTF-8, performed by encode()
         """
         raw = decode_header(header)
         retval = []
