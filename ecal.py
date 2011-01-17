@@ -54,6 +54,9 @@ class EcalRequestHandler(webapp.RequestHandler):
             server = 'https://' + os.environ['APPLICATION_ID'] + 'appspot.com'
         else:
             server = 'http://www.myeventbot.com'
+        # TODO: canonical URL below sometimes (always?) has an extra
+        # '/'.  Need to devise a unit test to catch this, and then
+        # fix.
         return server + '/' + path
 
     def global_template_vals(self):
