@@ -73,7 +73,6 @@ class TokenRevokedHandler(FeedbackHandler):
     def __init__(self, message, adr):
         self.message = message
         self.adr = adr
-        self.warning = "Token for address " + self.adr + " doesn't appear to be valid anymore"
 
     def values(self):
         return { 'address': self.adr,
@@ -146,12 +145,12 @@ class CreateEventHandler(InboundMailHandler):
             event = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
             if err.args[0]['status'] == 401:
+                logging.exception("Token doesn't appear to be valid anymore")
                 TokenRevokedHandler(message, self._get_email_address()).send()
             else:
-                # TODO: should probably re-raise the exception,
-                # otherwise RequestErrors other than 401 will silently
-                # fail to create the event
-                logging.exception("couldn't create event")
+                # Don't know what the error is, let's re-raise it so
+                # it gets logged and the message retried
+                raise
             return
         current_user.last_action = datetime.now()
         current_user.put()
