@@ -7,6 +7,9 @@ import ecal
 
 
 class StaticHandler(ecal.EcalRequestHandler):
+    def head(self, path):
+        self.get(path)
+
     def get(self, path):
         self.response.headers['Cache-Control'] = 'public, max-age=14400'
         if path == "":
