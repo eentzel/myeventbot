@@ -62,6 +62,8 @@ class HeaderToUTF8(unittest.TestCase):
         for input, expected in self.valid:
             self.assertEqual(CreateEventHandler.header_to_utf8(input), expected)
 
+    # TODO: negative testcases for incorrectly-encoded strings
+
 
 class FormatDate(unittest.TestCase):
     valid = ( # PM:
