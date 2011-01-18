@@ -6,6 +6,7 @@
 import ecal
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from google.appengine.api import mail
 from gdata.service import RequestError
 from email.header import decode_header
 import logging
@@ -123,10 +124,11 @@ class CreateEventHandler(InboundMailHandler):
             retval.append(value)
         return ''.join(retval).encode('utf-8')
 
+    def post(self):
+        logging.info(self.request.body)
+        self.receive(mail.InboundEmailMessage(self.request.body))
+
     def receive(self, message):
-        logging.info("Receiving Subject: " + message.subject)
-        logging.info("Receiving original Subject: " +
-                     message.original['Subject'])
         current_user = self._get_user()
         if current_user == None:
             NoSuchAddressHandler(message, self._get_email_address()).send()
