@@ -18,7 +18,7 @@ class DashboardHandler(ecal.EcalRequestHandler):
         signups = query.fetch(99999)
         retval = []
         for day in self.days:
-            retval.append(len([u for u in signups if u.date_added - day < self.one_day]))
+            retval.append(len([u for u in signups if u.date_added - day < self.one_day and u.date_added - day >= datetime.timedelta(0)]))
         return retval
 
     @staticmethod
