@@ -9,9 +9,22 @@
     <body>
         <div id="content">
             <h1>Dashboard</h1>
-            <p>
-                New signups today: {{signups}}
-            </p>
+            <table>
+                <thead><tr>
+                    <th>Event</th>
+                    {% for day in days %}
+                    <th>{{day}}</th>
+                    {% endfor %}
+                </tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Signups</td>
+                        {% for s in signups %}
+                            <td>{{s}}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>

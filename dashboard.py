@@ -8,11 +8,29 @@ from google.appengine.ext.webapp import util
 import ecal
 
 
+DAYS_OF_HISTORY = 7
+
+    
 class DashboardHandler(ecal.EcalRequestHandler):
+    
+    def signups(self):
+        query = ecal.EcalUser.all().filter('date_added >=', self.days[-1])
+        signups = query.fetch(99999)
+        retval = []
+        for day in self.days:
+            retval.append(len([u for u in signups if u.date_added - day < self.one_day]))
+        return retval
+
+    @staticmethod
+    def format_day(day):
+        return '<span class="month">%s</span><span class="day">%d</span>' % (day.strftime('%b'), day.day)
+        
     def get(self):
-        one_day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
-        query = ecal.EcalUser.all().filter('date_added >=', one_day_ago)
-        self.respond_with_template('dashboard.html', {'signups': query.count()})
+        today_start = datetime.datetime.today().replace(hour=0, minute=0,
+                                                        second=0, microsecond=0)
+        self.one_day = datetime.timedelta(days=1)
+        self.days = [today_start - i * self.one_day for i in xrange(0, DAYS_OF_HISTORY)]
+        self.respond_with_template('dashboard.html', {'signups': self.signups(), 'days': [self.format_day(d) for d in self.days]})
 
 
 def main():
