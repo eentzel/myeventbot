@@ -15,6 +15,7 @@ from datetime import datetime
 import google_api
 import outgoing_mail
 import re
+import string
 
 
 class FeedbackHandler(object):
@@ -125,8 +126,12 @@ class CreateEventHandler(InboundMailHandler):
         return ''.join(retval).encode('utf-8')
 
     def post(self):
-        logging.info(self.request.body)
-        self.receive(mail.InboundEmailMessage(self.request.body))
+        # Overridden to strip the 'Bcc' header before creating an
+        # InboundEmailMessage, since we never need it and
+        # InboundEmailMessage barfs on an empty 'Bcc'
+        lines = string.split(self.request.body, '\n')
+        new_body = '\n'.join([l for l in lines if l[:4] != 'Bcc:'])
+        self.receive(mail.InboundEmailMessage(new_body))
 
     def receive(self, message):
         current_user = self._get_user()
