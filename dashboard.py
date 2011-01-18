@@ -13,7 +13,6 @@ class DashboardHandler(ecal.EcalRequestHandler):
         one_day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
         query = ecal.EcalUser.all().filter('date_added >=', one_day_ago)
         self.respond_with_template('dashboard.html', {'signups': query.count()})
-        pass
 
 
 def main():
