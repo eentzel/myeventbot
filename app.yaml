@@ -22,7 +22,7 @@ handlers:
   script: registration.py
   secure: always
 - url: /test.*
-  script: gaeunit.py
+  script: lib/gaeunit.py
   login: admin
 - url: /dashboard
   script: dashboard.py
