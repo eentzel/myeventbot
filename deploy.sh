@@ -19,5 +19,8 @@ then
     echo
 fi
 
+echo "Compiling .less files"
+for i in static/*less ; do lessc $i ; done
+
 echo "Uploading branch '${BRANCH}' to App Engine"
 appcfg.py update . --version $BRANCH
