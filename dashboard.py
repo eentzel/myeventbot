@@ -14,8 +14,7 @@ DAYS_OF_HISTORY = 7
 class DashboardHandler(ecal.EcalRequestHandler):
     
     def signups(self):
-        query = ecal.EcalUser.all().filter('date_added >=', self.days[-1])
-        signups = query.fetch(99999)
+        signups = ecal.EcalUser.all().filter('date_added >=', self.days[-1])
         retval = []
         for day in self.days:
             retval.append(len([u for u in signups if u.date_added - day < self.one_day and u.date_added - day >= datetime.timedelta(0)]))
