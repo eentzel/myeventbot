@@ -12,6 +12,13 @@ DAYS_OF_HISTORY = 9
 
     
 class DashboardHandler(ecal.EcalRequestHandler):
+    def all_users(self):
+        users = ecal.EcalUser.all()
+        return [u for u in users if u.last_action]
+
+    def active_users(self):
+        return [u for u in self.all_users() if u.last_action > datetime.datetime.now() - datetime.timedelta(days=DAYS_OF_HISTORY)]
+
     def unique_users(self):
         users = ecal.EcalUser.all().filter('last_action >=', self.days[-1])
         retval = []
@@ -37,6 +44,8 @@ class DashboardHandler(ecal.EcalRequestHandler):
         self.days = [today_start - i * self.one_day for i in xrange(0, DAYS_OF_HISTORY)]
         self.respond_with_template('dashboard.html', {
                 'signups': self.signups(),
+                'all_users': len(self.all_users()),
+                'active_users': len(self.active_users()),
                 'days': [self.format_day(d) for d in self.days],
                 'uniques': self.unique_users()})
 
