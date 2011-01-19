@@ -1,0 +1,58 @@
+html, body {
+    font-family: arial, sans-serif;
+    font-size: 18px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+}
+
+th {
+    font-weight: normal;
+    border: 1px solid black;
+    background: #ccc;
+    span {
+        display: block;
+    }
+    .month {
+        font-size: .7em;
+    }
+}
+
+th:first-child {
+    text-align: left;
+}
+
+td {
+    font-size: 2em;
+    border: 1px solid black;
+    vertical-align: bottom;
+}
+
+td:first-child {
+    font-size: 1em;
+}
+
+td:nth-child(2) {
+    color: #aaa;
+}
+/* 3rd child is implicitly black */
+td:nth-child(4) {
+    color: #222;
+}
+td:nth-child(5) {
+    color: #444;
+}
+td:nth-child(6) {
+    color: #666;
+}
+td:nth-child(7) {
+    color: #888;
+}
+td:nth-child(8) {
+    color: #aaa;
+}
