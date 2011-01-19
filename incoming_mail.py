@@ -145,6 +145,10 @@ class CreateEventHandler(InboundMailHandler):
             event = google_api.quickadd_event_using_token(message.subject, token)
         except RequestError, err:
             if err.args[0]['status'] == 401:
+                # TODO: we're hitting this when we shouldn't, with a
+                # HTTP 401 response "Unknown authorization header".
+                # Can we log the headers of the POST we sent, to see
+                # if there's anything obviously wrong with them?
                 logging.exception("Token doesn't appear to be valid anymore")
                 TokenRevokedHandler(message, self._get_email_address()).send()
             else:
