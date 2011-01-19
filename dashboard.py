@@ -8,7 +8,7 @@ from google.appengine.ext.webapp import util
 import ecal
 
 
-DAYS_OF_HISTORY = 7
+DAYS_OF_HISTORY = 9
 
     
 class DashboardHandler(ecal.EcalRequestHandler):
