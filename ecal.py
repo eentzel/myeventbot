@@ -42,6 +42,12 @@ class EcalUser(db.Model):
     last_action = db.DateTimeProperty()        
 
 
+class EcalAction(db.Model):
+    type = db.StringProperty()
+    time = db.DateTimeProperty(auto_now_add=True)
+    user = db.ReferenceProperty(EcalUser)
+
+
 class EcalWSGIApplication(webapp.WSGIApplication):
     def __init__(self, url_mapping):
         debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')

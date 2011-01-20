@@ -156,8 +156,8 @@ class CreateEventHandler(InboundMailHandler):
                 # it gets logged and the message retried
                 raise
             return
-        current_user.last_action = datetime.now()
-        current_user.put()
+        action = ecal.EcalAction(type="event_created", user=current_user)
+        action.put()
         SuccessHandler(message, event).send()
 
 
