@@ -48,6 +48,10 @@ class EcalAction(db.Model):
     user = db.ReferenceProperty(EcalUser)
 
 
+class EcalStat(db.Model):
+    value = db.IntegerProperty()
+
+
 class EcalWSGIApplication(webapp.WSGIApplication):
     def __init__(self, url_mapping):
         debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')

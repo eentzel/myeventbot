@@ -27,6 +27,9 @@ handlers:
 - url: /dashboard
   script: dashboard.py
   login: admin
+- url: /update_stats
+  script: update_stats.py
+  login: admin
 
 admin_console:
   pages:
