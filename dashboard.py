@@ -10,21 +10,30 @@ import ecal
 
 DAYS_OF_HISTORY = 9
 
-    
+
+def value_from_list(list, func, default=0):
+    matches = filter(func, list)
+    if len(matches) == 0:
+        return default
+    return matches[0].value
+
+
 class DashboardHandler(ecal.EcalRequestHandler):
     def all_users(self):
-        users = ecal.EcalUser.all()
-        return [u for u in users if u.last_action]
+        users = ecal.EcalUser.all().filter('last_action !=', None)
+        return users.fetch(ecal.LOTS_OF_RESULTS)
 
     def active_users(self):
         return [u for u in self.all_users() if u.last_action > datetime.datetime.now() - datetime.timedelta(days=DAYS_OF_HISTORY)]
 
     def unique_users(self):
-        users = ecal.EcalUser.all().filter('last_action >=', self.days[-1])
-        retval = []
-        for day in self.days:
-            retval.append(len([u for u in users if u.last_action - day < self.one_day and u.last_action - day >= datetime.timedelta(0)]))
-        return retval
+        query = ecal.EcalStat.all()
+        query.filter('day >=', self.days[-1])
+        query.filter('day <=', self.days[0])
+        query.filter('type =', 'unique-users')
+        query.order('-day')
+        stats = query.fetch(ecal.LOTS_OF_RESULTS)
+        return [value_from_list(stats, lambda s: s.day == d.date()) for d in self.days]
     
     def signups(self):
         signups = ecal.EcalUser.all().filter('date_added >=', self.days[-1])

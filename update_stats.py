@@ -8,9 +8,6 @@ from google.appengine.ext.webapp import util
 import ecal
 
 
-MAX_ACTIONS = 999999
-
-
 class StatsUpdater(ecal.EcalRequestHandler):
     def get(self):    # TODO: s/b post() because it's definitely not idempotent
         start_time = datetime.datetime.strptime(self.request.get('day'), '%Y-%m-%d')
@@ -21,7 +18,7 @@ class StatsUpdater(ecal.EcalRequestHandler):
         query.filter('type =', 'event_created')
         query.filter('time >=', start_time)
         query.filter('time >', end_time)
-        actions = query.fetch(MAX_ACTIONS)
+        actions = query.fetch(ecal.LOTS_OF_RESULTS)
 
         events_created = ecal.EcalStat(key_name='events-created-' + str(day),
                                        type='events-created',

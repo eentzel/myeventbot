@@ -14,3 +14,9 @@ indexes:
   properties:
   - name: type
   - name: time
+
+- kind: EcalStat
+  properties:
+  - name: type
+  - name: day
+    direction: desc

@@ -13,6 +13,10 @@ import google_api
 import os
 
 
+# Constant for datstore queries:
+LOTS_OF_RESULTS = 999999
+
+
 class RandomAddressProperty(db.StringProperty):
     def default_value(self):
         """
