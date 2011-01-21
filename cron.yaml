@@ -1,0 +1,4 @@
+cron:
+- description: daily stats compilation
+  url: /update_stats
+  schedule: every day 02:00
