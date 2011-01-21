@@ -7,6 +7,7 @@ import ecal
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.api import mail
+from google.appengine.runtime import apiproxy_errors
 from gdata.service import RequestError
 from email.header import decode_header
 import logging
@@ -156,8 +157,13 @@ class CreateEventHandler(InboundMailHandler):
                 # it gets logged and the message retried
                 raise
             return
-        action = ecal.EcalAction(type="event_created", user=current_user)
-        action.put()
+        try:
+            action = ecal.EcalAction(type="event_created", user=current_user)
+            action.put()
+        except apiproxy_errors.CapabilityDisabledError:
+            # The event's already been created, if we can't record the
+            # EcalAction, so be it
+            pass
         SuccessHandler(message, event).send()
 
 
