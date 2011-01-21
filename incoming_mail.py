@@ -38,7 +38,7 @@ class FeedbackHandler(object):
             logging.info("Subject: " + self.message.subject)
         try:
             outgoing_mail.send(recipient, self.template_name, self.values())                
-        except Exception, err:
+        except Exception:
             logging.exception("unable to send email to %s using template %s" %
                               (recipient, self.template_name))
 
