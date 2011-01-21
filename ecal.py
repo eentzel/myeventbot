@@ -49,6 +49,8 @@ class EcalAction(db.Model):
 
 
 class EcalStat(db.Model):
+    type = db.StringProperty()
+    day = db.DateProperty()
     value = db.IntegerProperty()
 
 

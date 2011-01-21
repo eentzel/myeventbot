@@ -15,7 +15,7 @@ class StatsUpdater(ecal.EcalRequestHandler):
     def get(self):    # TODO: s/b post() because it's definitely not idempotent
         start_time = datetime.datetime.strptime(self.request.get('day'), '%Y-%m-%d')
         end_time = start_time + datetime.timedelta(days=1)
-        day = str(start_time.date())
+        day = start_time.date()
 
         query = ecal.EcalAction.all()
         query.filter('type =', 'event_created')
@@ -23,14 +23,18 @@ class StatsUpdater(ecal.EcalRequestHandler):
         query.filter('time >', end_time)
         actions = query.fetch(MAX_ACTIONS)
 
-        events_created = ecal.EcalStat(key_name='events-created-' + day,
+        events_created = ecal.EcalStat(key_name='events-created-' + str(day),
+                                       type='events-created',
+                                       day=day,
                                        value=len(actions))
         events_created.put()
 
         unique_users = {}
         for action in actions:
             unique_users[action.user] = True
-        num_unique_users = ecal.EcalStat(key_name='unique-users-' + day,
+        num_unique_users = ecal.EcalStat(key_name='unique-users-' + str(day),
+                                         type='unique-users',
+                                         day=day,
                                          value=len(unique_users))
         num_unique_users.put()
 
