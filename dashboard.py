@@ -26,11 +26,11 @@ class DashboardHandler(ecal.EcalRequestHandler):
     def active_users(self):
         return [u for u in self.all_users() if u.last_action > datetime.datetime.now() - datetime.timedelta(days=DAYS_OF_HISTORY)]
 
-    def unique_users(self):
+    def ecal_stat(self, name):
         query = ecal.EcalStat.all()
         query.filter('day >=', self.days[-1])
         query.filter('day <=', self.days[0])
-        query.filter('type =', 'unique-users')
+        query.filter('type =', name)
         query.order('-day')
         stats = query.fetch(ecal.LOTS_OF_RESULTS)
         return [value_from_list(stats, lambda s: s.day == d.date()) for d in self.days]
@@ -55,8 +55,9 @@ class DashboardHandler(ecal.EcalRequestHandler):
                 'signups': self.signups(),
                 'all_users': len(self.all_users()),
                 'active_users': len(self.active_users()),
+                'events_created': self.ecal_stat('events-created'),
                 'days': [self.format_day(d) for d in self.days],
-                'uniques': self.unique_users()})
+                'uniques': self.ecal_stat('unique-users')})
 
 
 def main():
