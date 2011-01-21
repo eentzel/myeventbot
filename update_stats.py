@@ -17,7 +17,7 @@ class StatsUpdater(ecal.EcalRequestHandler):
         query = ecal.EcalAction.all()
         query.filter('type =', 'event_created')
         query.filter('time >=', start_time)
-        query.filter('time >', end_time)
+        query.filter('time <', end_time)
         actions = query.fetch(ecal.LOTS_OF_RESULTS)
 
         events_created = ecal.EcalStat(key_name='events-created-' + str(day),
