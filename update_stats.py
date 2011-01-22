@@ -9,14 +9,14 @@ import ecal
 
 
 class StatsUpdater(ecal.EcalRequestHandler):
-    def get(self):    # TODO: s/b post() because it's definitely not idempotent
+    def get(self):
         one_day = datetime.timedelta(days=1)
         if self.request.get('day'):
             start_time = datetime.datetime.strptime(self.request.get('day'), '%Y-%m-%d')
             end_time = start_time + one_day
         else:
             end_time = datetime.datetime.today().replace(hour=0, minute=0,
-                                                       second=0, microsecond=0)
+                                                         second=0, microsecond=0)
             start_time = end_time - one_day
         day = start_time.date()
 
@@ -49,5 +49,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-        
