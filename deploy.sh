@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Check that all dependencies are available:
+dependencies='git sed lessc appcfg.py'
+for binary in $dependencies; do
+    if [ -z `which $binary` ]; then
+        echo "Required binary '$binary' was not found in \$PATH:"
+        echo $PATH
+        exit
+    fi
+done
+
 BRANCH=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
 
 if [ "$BRANCH" != "master" ] && [ "$BRANCH" != "staging" ]
