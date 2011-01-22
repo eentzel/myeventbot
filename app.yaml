@@ -15,6 +15,7 @@ handlers:
 - url: /version.txt
   static_files: version.txt
   upload: version.txt
+  expiration: 0s
 - url: /favicon.ico
   static_files: static/favicon.ico
   upload: static/favicon.ico
