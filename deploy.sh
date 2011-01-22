@@ -22,5 +22,8 @@ fi
 echo "Compiling .less files"
 for i in static/*less ; do lessc $i ; done
 
+echo "Generating version.txt"
+git rev-parse --verify HEAD > version.txt
+
 echo "Uploading branch '${BRANCH}' to App Engine"
 appcfg.py update . --version $BRANCH

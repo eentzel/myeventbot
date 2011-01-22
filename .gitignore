@@ -6,3 +6,5 @@
 test_token.txt
 # because shell scripts are for local use, not for App Engine
 *.sh
+# because it's auto-generated:
+version\.txt
