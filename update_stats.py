@@ -34,7 +34,8 @@ class StatsUpdater(ecal.EcalRequestHandler):
 
         unique_users = {}
         for action in actions:
-            unique_users[action.user] = True
+            key = str(action.user.key())
+            unique_users[key] = True
         num_unique_users = ecal.EcalStat(key_name='unique-users-' + str(day),
                                          type='unique-users',
                                          day=day,

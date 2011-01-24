@@ -129,8 +129,6 @@ class CreateEventHandler(InboundMailHandler):
         # Overridden to strip the 'Bcc' header before creating an
         # InboundEmailMessage, since we never need it and
         # InboundEmailMessage barfs on an empty 'Bcc'
-        logging.info('in post() before stipping Bcc:')
-        logging.info(self.request.body)
         lines = string.split(self.request.body, '\n')
         new_body = '\n'.join([l for l in lines if l[:4] != 'Bcc:'])
         self.receive(mail.InboundEmailMessage(new_body))
@@ -141,8 +139,6 @@ class CreateEventHandler(InboundMailHandler):
             NoSuchAddressHandler(message, self._get_email_address()).send()
             return
         token = current_user.auth_token
-        logging.info('in receive():')
-        logging.info(message)
         message.subject = CreateEventHandler.header_to_utf8(message.subject)
         logging.info("Decoded Subject: " + message.subject)
         # TODO: everything after this point should move into a task queue
