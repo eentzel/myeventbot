@@ -38,7 +38,7 @@ handlers:
 
 admin_console:
   pages:
-  - name: Dashboard
+  - name: Stats
     url: /dashboard
 
 skip_files:
