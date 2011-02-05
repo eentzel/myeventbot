@@ -20,8 +20,10 @@ def value_from_list(list, func, default=0):
 
 class DashboardHandler(ecal.EcalRequestHandler):
     def all_users(self):
-        users = ecal.EcalUser.all().filter('last_action !=', None)
-        return users.fetch(ecal.LOTS_OF_RESULTS)
+        if not hasattr(self, 'all_users_cache'):
+            query = ecal.EcalUser.all().filter('last_action !=', None)
+            self.all_users_cache = query.fetch(ecal.LOTS_OF_RESULTS)
+        return self.all_users_cache
 
     def active_users(self):
         return [u for u in self.all_users() if u.last_action > datetime.datetime.now() - datetime.timedelta(days=DAYS_OF_HISTORY)]
