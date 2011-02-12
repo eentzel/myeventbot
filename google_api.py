@@ -16,7 +16,7 @@ if not debug:
 
 def get_client():
     client = gdata.service.GDataService()
-    gdata.alt.appengine.run_on_appengine(client)
+    gdata.alt.appengine.run_on_appengine(client, deadline=10)
     return client
 
 def get_client_with_token(token_str):
