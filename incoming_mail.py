@@ -125,12 +125,16 @@ class CreateEventHandler(InboundMailHandler):
             retval.append(value)
         return ''.join(retval).encode('utf-8')
 
+    @staticmethod
+    def strip_bcc(body):
+        lines = string.split(body, '\n')
+        return '\n'.join([l for l in lines if l[:4] != 'Bcc:'])
+
     def post(self):
         # Overridden to strip the 'Bcc' header before creating an
         # InboundEmailMessage, since we never need it and
         # InboundEmailMessage barfs on an empty 'Bcc'
-        lines = string.split(self.request.body, '\n')
-        new_body = '\n'.join([l for l in lines if l[:4] != 'Bcc:'])
+        new_body = CreateEventHandler.strip_bcc(self.request.body)
         self.receive(mail.InboundEmailMessage(new_body))
 
     def receive(self, message):

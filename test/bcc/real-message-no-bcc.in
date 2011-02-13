@@ -1,0 +1,36 @@
+Received: by 10.90.163.6 with SMTP id l6mr2876381age.11.1295318833869;
+        Mon, 17 Jan 2011 18:47:13 -0800 (PST)
+Return-Path: <eric.entzel@gmail.com>
+Received: from mail-gy0-f178.google.com (mail-gy0-f178.google.com [209.85.160.178])
+        by gmr-mx.google.com with ESMTP id u31si495897yba.5.2011.01.17.18.47.12;
+        Mon, 17 Jan 2011 18:47:12 -0800 (PST)
+Received-SPF: pass (google.com: domain of eric.entzel@gmail.com designates 209.85.160.178 as permitted sender) client-ip=209.85.160.178;
+Authentication-Results: gmr-mx.google.com; spf=pass (google.com: domain of eric.entzel@gmail.com designates 209.85.160.178 as permitted sender) smtp.mail=eric.entzel@gmail.com; dkim=pass (test mode) header.i=@gmail.com
+Received: by gyh4 with SMTP id 4so2303224gyh.23
+        for <zCw3JTQ2qh@myeventbot.appspotmail.com>; Mon, 17 Jan 2011 18:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:sender:date:x-google-sender-auth
+         :message-id:subject:from:content-type;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=urJsOTU5/i9RsuqsK5ynNbvhFmx+vXeXMap05PMJC6qSdzXA4nGFGJ+2WexpPUAenc
+         uTVz0iMPq74ya6BIuS2o86PvqKpdmE67ldAtqQXjL+vnMXsZAeId/M44ek2HqDhQZAFI
+         DMpO7m8fTJUjMgVIvh6RE+Dt6Jm+sMUYzrj/k=
+DomainKey-Signature: a=rsa-sha1; c=nofws;
+        d=gmail.com; s=gamma;
+        h=mime-version:sender:date:x-google-sender-auth:message-id:subject
+         :from:content-type;
+        b=VTyNabRzA4HGHET9MHA9lfkNBTFlbtk2Mqf0r/T6FcAGV/dk25nKPmPn2zG8sHIyFY
+         rwA7Kme5UPt7xUjVJJWbpUODMtvzYM8fIoIu8M1dFkqZqWh4qk87kdHrWf5Tsf0NkriK
+         NC5p72qb1vwwAzhJ79Q8EKlRCiDsUHvkn7tuA=
+MIME-Version: 1.0
+Received: by 10.91.64.2 with SMTP id r2mr5536463agk.133.1295318832472; Mon, 17
+ Jan 2011 18:47:12 -0800 (PST)
+Sender: eric.entzel@gmail.com
+Received: by 10.90.52.18 with HTTP; Mon, 17 Jan 2011 18:47:12 -0800 (PST)
+Date: Mon, 17 Jan 2011 19:47:12 -0700
+X-Google-Sender-Auth: rmhk2cKpMraUNFjL7ezyCVKppjw
+Message-ID: <AANLkTim=d9mE5hty8oLkx-RdJ0XCPCL8Q1D3wjv9OSJp@mail.gmail.com>
+Subject: bcc to eventbot thursday 11am
+From: Eric Entzel <eric@ubermac.net>
+Content-Type: text/plain; charset=UTF-8

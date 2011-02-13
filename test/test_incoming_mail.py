@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import glob
+import os
 import unittest
 from incoming_mail import CreateEventHandler
 from ecal import EcalUser
@@ -63,6 +65,18 @@ class HeaderToUTF8(unittest.TestCase):
             self.assertEqual(CreateEventHandler.header_to_utf8(input), expected)
 
     # TODO: negative testcases for incorrectly-encoded strings
+
+
+class StripBcc(unittest.TestCase):
+    def testBcc(self):
+        input_filenames = glob.iglob(os.path.join(os.path.dirname(__file__), 'bcc/*.in'))
+        for file_name in input_filenames:
+            input = open(file_name)
+            output = open(file_name.replace('.in', '.out'))
+            stripped = CreateEventHandler.strip_bcc(input.read())
+            self.assertEqual(stripped, output.read())
+            input.close()
+            output.close()
 
 
 class FormatDate(unittest.TestCase):
