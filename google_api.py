@@ -7,6 +7,7 @@ from xml.sax.saxutils import escape
 
 GCAL_FEED = 'https://www.google.com/calendar/feeds/default/private/full'
 rsa_key = None
+# TODO: always use secure tokens, need a separate RSA key for dev, staging, prod
 debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')
 if not debug:
     f = open(os.path.join(os.path.dirname(__file__), 'myrsakey.pem'))
