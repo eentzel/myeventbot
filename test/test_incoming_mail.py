@@ -94,10 +94,12 @@ class FormatDate(unittest.TestCase):
               ("2011-06-11T15:20:12.000-03:00", "Sat Jun 11 3:20 PM"),
 
               # Timezone with positive offest:
-              ("2011-06-11T15:20:12.000+03:00", "Sat Jun 11 3:20 PM"),                  
+              ("2011-06-11T15:20:12.000+03:00", "Sat Jun 11 3:20 PM"),
+
+              # TODO: add tests for all-day events ("%Y-%m-%d")
 
               # Zulu timezone
-              ("2011-06-11T15:20:12.000Z", "Sat Jun 11 3:20 PM"),                  
+              ("2011-06-11T15:20:12.000Z", "Sat Jun 11 3:20 PM"),
               
               # Corner cases:
               ("2011-01-01T00:00:00.000-06:00", "Sat Jan 1 12:00 AM"),
