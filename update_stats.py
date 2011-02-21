@@ -13,7 +13,8 @@ class StatsUpdater(ecal.EcalRequestHandler):
         self.init_timeperiod()
         self.update_events_created()
         self.update_unique_users()
-
+        self.update_signups()
+        
     def init_timeperiod(self):
         one_day = datetime.timedelta(days=1)
         if self.request.get('day'):
@@ -51,6 +52,18 @@ class StatsUpdater(ecal.EcalRequestHandler):
                                          day=self.day,
                                          value=len(unique_users))
         num_unique_users.put()
+
+    def update_signups(self):
+        query = ecal.EcalUser.all()
+        query.filter('date_added >=', self.start_time)
+        query.filter('date_added <', self.end_time)
+        active_users = [u for u in query.fetch(ecal.LOTS_OF_RESULTS)
+                        if u.ecalaction_set.count(limit=1) > 0]
+        signups = ecal.EcalStat(key_name='signups-' + str(self.day),
+                                type='signups',
+                                day = self.day,
+                                value = len(active_users))
+        signups.put()
 
 
 def main():

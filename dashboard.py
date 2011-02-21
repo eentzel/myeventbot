@@ -36,13 +36,6 @@ class DashboardHandler(ecal.EcalRequestHandler):
         query.order('-day')
         stats = query.fetch(ecal.LOTS_OF_RESULTS)
         return [value_from_list(stats, lambda s: s.day == d.date()) for d in self.days]
-    
-    def signups(self):
-        signups = ecal.EcalUser.all().filter('date_added >=', self.days[-1])
-        retval = []
-        for day in self.days:
-            retval.append(len([u for u in signups if u.date_added - day < self.one_day and u.date_added - day >= datetime.timedelta(0)]))
-        return retval
 
     @staticmethod
     def format_day(day):
@@ -54,7 +47,7 @@ class DashboardHandler(ecal.EcalRequestHandler):
         self.one_day = datetime.timedelta(days=1)
         self.days = [today_start - i * self.one_day for i in xrange(0, DAYS_OF_HISTORY)]
         self.respond_with_template('dashboard.html', {
-                'signups': self.signups(),
+                'signups': self.ecal_stat('signups'),
                 'all_users': len(self.all_users()),
                 'active_users': len(self.active_users()),
                 'events_created': self.ecal_stat('events-created'),
