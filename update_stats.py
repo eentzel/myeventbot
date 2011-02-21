@@ -10,35 +10,45 @@ import ecal
 
 class StatsUpdater(ecal.EcalRequestHandler):
     def get(self):
+        self.init_timeperiod()
+        self.update_events_created()
+        self.update_unique_users()
+
+    def init_timeperiod(self):
         one_day = datetime.timedelta(days=1)
         if self.request.get('day'):
-            start_time = datetime.datetime.strptime(self.request.get('day'), '%Y-%m-%d')
-            end_time = start_time + one_day
+            self.start_time = datetime.datetime.strptime(self.request.get('day'), '%Y-%m-%d')
+            self.end_time = self.start_time + one_day
         else:
-            end_time = datetime.datetime.today().replace(hour=0, minute=0,
+            self.end_time = datetime.datetime.today().replace(hour=0, minute=0,
                                                          second=0, microsecond=0)
-            start_time = end_time - one_day
-        day = start_time.date()
+            self.start_time = self.end_time - one_day
+        self.day = self.start_time.date()
 
-        query = ecal.EcalAction.all()
-        query.filter('type =', 'event_created')
-        query.filter('time >=', start_time)
-        query.filter('time <', end_time)
-        actions = query.fetch(ecal.LOTS_OF_RESULTS)
+    def actions(self):
+        if not hasattr(self, 'actions_cache'):
+            query = ecal.EcalAction.all()
+            query.filter('type =', 'event_created')
+            query.filter('time >=', self.start_time)
+            query.filter('time <', self.end_time)
+            self.actions_cache = query.fetch(ecal.LOTS_OF_RESULTS)
+        return self.actions_cache
 
-        events_created = ecal.EcalStat(key_name='events-created-' + str(day),
+    def update_events_created(self):
+        events_created = ecal.EcalStat(key_name='events-created-' + str(self.day),
                                        type='events-created',
-                                       day=day,
-                                       value=len(actions))
+                                       day=self.day,
+                                       value=len(self.actions()))
         events_created.put()
 
+    def update_unique_users(self):
         unique_users = {}
-        for action in actions:
+        for action in self.actions():
             key = str(action.user.key())
             unique_users[key] = True
-        num_unique_users = ecal.EcalStat(key_name='unique-users-' + str(day),
+        num_unique_users = ecal.EcalStat(key_name='unique-users-' + str(self.day),
                                          type='unique-users',
-                                         day=day,
+                                         day=self.day,
                                          value=len(unique_users))
         num_unique_users.put()
 
