@@ -53,6 +53,9 @@ class StatsUpdater(ecal.EcalRequestHandler):
                                          value=len(unique_users))
         num_unique_users.put()
 
+    def update_last_action(self):
+        pass
+
     def update_signups(self):
         query = ecal.EcalUser.all()
         query.filter('date_added >=', self.start_time)
