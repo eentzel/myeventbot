@@ -19,10 +19,10 @@ LOTS_OF_RESULTS = 999999
 class RandomAddressProperty(db.StringProperty):
     def default_value(self):
         """
-        Returns a random alphanumeric string of 8 digits.  Since there
-        are 57 choices per digit (we exclude '0', 'O', 'l', 'I' and '1'
-        for readability), this gives:
-        57 ** 8 = 1.11429157 x 10 ** 14
+        Returns a random alphanumeric (lowercase) string of 9 digits.
+        Since there are 32 choices per digit (we exclude 'o', 'l', '0'
+        and '1' for readability), this gives:
+        32 ** 9 = 3.51843721 x 10 ** 13
 
         possible results.  When there are a million accounts active,
         we need:
@@ -31,9 +31,9 @@ class RandomAddressProperty(db.StringProperty):
         possible results to have a one-in-a-million chance of a
         collision, so this seems like a safe number.
         """
-        chars = string.letters + string.digits
-        chars = chars.translate(string.maketrans('', ''), '0OlI1')
-        return ''.join([ random.choice(chars) for i in range(8) ])
+        chars = string.lowercase + string.digits
+        chars = chars.translate(string.maketrans('', ''), 'ol01')
+        return ''.join([ random.choice(chars) for i in range(9) ])
 
 
 class EcalUser(db.Model):
