@@ -44,6 +44,14 @@ class FeedbackHandler(object):
                               (recipient, self.template_name))
 
 
+class NoSubjectHandler(FeedbackHandler):
+    template_name = 'no_subject'
+    def __init__(self, message):
+        self.message = message
+    def values(self):
+        pass
+
+
 class NoSuchAddressHandler(FeedbackHandler):
     template_name = 'no_such_address'
     def __init__(self, message, adr):
@@ -138,6 +146,9 @@ class CreateEventHandler(InboundMailHandler):
         self.receive(mail.InboundEmailMessage(new_body))
 
     def receive(self, message):
+        if not hasattr(message, 'subject'):
+            NoSubjectHandler(message).send()
+            return
         current_user = self._get_user()
         if current_user == None:
             NoSuchAddressHandler(message, self._get_email_address()).send()
