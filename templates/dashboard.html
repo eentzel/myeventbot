@@ -18,7 +18,7 @@
                 <thead><tr>
                     <th>Event</th>
                     {% for day in days %}
-                    <th>{{day}}</th>
+                    <th>{{day|safe}}</th>
                     {% endfor %}
                 </tr></thead>
                 <tbody>
