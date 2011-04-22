@@ -1,0 +1,6 @@
+{% filter wordwrap:76 %}
+EventBot could not create your event becuase the subject line of your email was empty.  To create an event, put the event description in the subject line of your email.  EventBot supports the Google Calendar "Quick Add" feature as described here:
+
+http://www.google.com/support/calendar/bin/answer.py?hl=en&answer=36604
+{% endfilter %}
+

@@ -36,7 +36,8 @@ class FeedbackHandler(object):
         if hasattr(self, 'warning'):
             logging.warn(self.warning)
             logging.info("Sender: " + recipient)
-            logging.info("Subject: " + self.message.subject)
+            if hasattr(self.message, 'subject'):
+                logging.info("Subject: " + self.message.subject)
         try:
             outgoing_mail.send(recipient, self.template_name, self.values())                
         except Exception:
@@ -46,10 +47,11 @@ class FeedbackHandler(object):
 
 class NoSubjectHandler(FeedbackHandler):
     template_name = 'no_subject'
+    warning = "Couldn't create event because message had no subject"
     def __init__(self, message):
         self.message = message
     def values(self):
-        pass
+        return { 'original_body': self.message.body }
 
 
 class NoSuchAddressHandler(FeedbackHandler):
