@@ -56,6 +56,8 @@ def quickadd_event_using_token(event, token_str):
                       <content type="html">%s</content>
                       <gCal:quickadd value="true"/>
                   </entry>""" % escape(event)
+    # TODO: might be over-escaping - '&' in email subject
+    # shows up as '&amp;' in event titles
     return client.Post(xml_data, GCAL_FEED)
 
 def delete_event_using_token(event_url, token_str):
