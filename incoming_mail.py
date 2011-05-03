@@ -125,15 +125,18 @@ class CreateEventHandler(InboundMailHandler):
             2) character set (e.g., utf-8 or iso-8859-1) decoding, performed by decode()
             3) conversion into UTF-8, performed by encode()
         """
-        raw = decode_header(header)
-        retval = []
-        for part in raw:
-            value = part[0]
-            charset = part[1]
-            if charset:
-                value = value.decode(charset)
-            retval.append(value)
-        return ''.join(retval).encode('utf-8')
+        try:
+            raw = decode_header(header)
+            retval = []
+            for part in raw:
+                value = part[0]
+                charset = part[1]
+                if charset:
+                    value = value.decode(charset)
+                retval.append(value)
+            return ''.join(retval).encode('utf-8')
+        except UnicodeDecodeError, err:
+            logging.exception("Couldn't decode header: " + header)
 
     @staticmethod
     def strip_bcc(body):
