@@ -31,6 +31,8 @@ def get_client_with_token(token_str):
     return client
 
 def generate_auth_link():
+    # TODO: make a table of env differences in (prod, staging, local)
+    # and isolate those into one place
     next_url = atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/register')
     client = get_client()
     url = client.GenerateAuthSubURL(next_url,
