@@ -118,7 +118,7 @@ class CreateEventHandler(InboundMailHandler):
         return retval
 
     @staticmethod
-    def header_to_utf8(header):
+    def header_to_utf8(header, default='utf-8'):
         """It appears that GAE does not decode rfc2047-encoded headers
         for us, so we have to do it manually.  Up to three steps may
         be needed:
@@ -127,15 +127,9 @@ class CreateEventHandler(InboundMailHandler):
             3) conversion into UTF-8, performed by encode()
         """
         try:
-            raw = decode_header(header)
-            retval = []
-            for part in raw:
-                value = part[0]
-                charset = part[1]
-                if charset:
-                    value = value.decode(charset)
-                retval.append(value)
-            return ''.join(retval).encode('utf-8')
+            parts = decode_header(header)
+            decoded = [value.decode(charset or default) for value, charset in parts]
+            return u"".join(decoded).encode('utf-8')
         except UnicodeDecodeError, err:
             logging.exception("Couldn't decode header: " + pickle.dumps(header))
 
