@@ -17,6 +17,7 @@ import google_api
 import outgoing_mail
 import re
 import string
+import pickle
 
 
 class FeedbackHandler(object):
@@ -136,7 +137,7 @@ class CreateEventHandler(InboundMailHandler):
                 retval.append(value)
             return ''.join(retval).encode('utf-8')
         except UnicodeDecodeError, err:
-            logging.exception("Couldn't decode header: " + header)
+            logging.exception("Couldn't decode header: " + pickle.dumps(header))
 
     @staticmethod
     def strip_bcc(body):
