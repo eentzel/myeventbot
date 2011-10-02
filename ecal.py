@@ -42,7 +42,8 @@ class EcalUser(db.Model):
     # the AuthSub token used to authenticate the user to gcal:
     auth_token = db.StringProperty()
     date_added = db.DateTimeProperty(auto_now_add=True)
-    last_action = db.DateTimeProperty()        
+    last_action = db.DateTimeProperty()
+    google_account = db.UserProperty(auto_current_user_add=True)
 
 
 class EcalAction(db.Model):
