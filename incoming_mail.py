@@ -179,7 +179,8 @@ class CreateEventHandler(InboundMailHandler):
             # The event's already been created, if we can't record the
             # EcalAction, so be it
             pass
-        SuccessHandler(message, event).send()
+        if current_user.send_emails:
+            SuccessHandler(message, event).send()
 
 
 def main():
