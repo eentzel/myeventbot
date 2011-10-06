@@ -28,7 +28,6 @@ handlers:
   secure: always
 - url: /authorize
   script: registration.py
-  secure: always
   login: required
 - url: /test.*
   script: lib/gaeunit.py
