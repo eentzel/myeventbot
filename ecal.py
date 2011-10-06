@@ -79,7 +79,7 @@ class EcalRequestHandler(webapp.RequestHandler):
     def global_template_vals(self):
         return {
             'canonical': self.canonical(self.request.path),
-            'auth_link': google_api.generate_auth_link()
+            'auth_link': '/authorize'
             }
     
     def respond_with_template(self, name, values):

@@ -35,9 +35,14 @@ class RegistrationHandler(ecal.EcalRequestHandler):
         else:
             self.authorization_denied()
 
+class SendToAuth(ecal.EcalRequestHandler):
+    def get(self):
+        self.redirect(google_api.generate_auth_link())
+
 
 def main():
-    application = ecal.EcalWSGIApplication([('/register', RegistrationHandler)])
+    application = ecal.EcalWSGIApplication([('/register', RegistrationHandler),
+                                            ('/authorize', SendToAuth)])
     util.run_wsgi_app(application)
 
 
