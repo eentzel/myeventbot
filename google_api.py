@@ -1,7 +1,6 @@
 import atom.url
 import gdata.service
 import gdata.alt.appengine
-from google.appengine.api import users
 import os
 from xml.sax.saxutils import escape
 
@@ -34,14 +33,14 @@ def get_client_with_token(token_str):
 def generate_auth_link():
     # TODO: make a table of env differences in (prod, staging, local)
     # and isolate those into one place
-    success_url = atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/register')
+    next_url = atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/register')
     client = get_client()
-    auth_url = client.GenerateAuthSubURL(success_url,
-                                         GCAL_FEED,
-                                         secure=(not debug),
-                                         session=True,
-                                         domain=None)
-    return users.create_login_url( str(auth_url) )
+    url = client.GenerateAuthSubURL(next_url,
+                                    GCAL_FEED,
+                                    secure=(not debug),
+                                    session=True,
+                                    domain=None)
+    return str(url)
 
 def temp_token_from_url(url):
     return gdata.auth.extract_auth_sub_token_from_url(url, rsa_key=rsa_key)
