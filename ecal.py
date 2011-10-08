@@ -10,6 +10,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import google_api
 import os
+import atom.url
 
 
 # Constant for datstore queries:
@@ -79,7 +80,7 @@ class EcalRequestHandler(webapp.RequestHandler):
     def global_template_vals(self):
         return {
             'canonical': self.canonical(self.request.path),
-            'auth_link': '/authorize'
+            'auth_link': atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/authorize')
             }
     
     def respond_with_template(self, name, values):
