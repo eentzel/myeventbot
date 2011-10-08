@@ -30,6 +30,7 @@ class RegistrationHandler(ecal.EcalRequestHandler):
 
     def get(self):
         if self.request.path == '/authorize':
+            # TODO: if user is already registered, tell them so
             self.redirect(google_api.generate_auth_link())
         else:
             self.temp_token = google_api.temp_token_from_url(self.request.uri)
