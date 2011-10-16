@@ -4,6 +4,8 @@
 #
 from google.appengine.ext.webapp import util
 from google.appengine.runtime import apiproxy_errors
+from google.appengine.api import users
+
 import os
 import google_api
 import ecal
@@ -15,7 +17,9 @@ class RegistrationHandler(ecal.EcalRequestHandler):
 
     def authorization_succeeded(self):
         session_token = google_api.permanent_token_from_temp_token(self.temp_token)
-        myuser = ecal.EcalUser(auth_token=session_token.get_token_string())
+        myuser = ecal.EcalUser(
+            auth_token=session_token.get_token_string(),
+            google_account_id=users.get_current_user().user_id())
         try:
             myuser.put()
         except apiproxy_errors.CapabilityDisabledError:
