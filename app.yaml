@@ -1,4 +1,4 @@
-application: myeventbot
+application: myeventbot-hrd
 version: testing
 runtime: python
 api_version: 1
