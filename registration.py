@@ -5,6 +5,7 @@
 from google.appengine.ext.webapp import util
 from google.appengine.runtime import apiproxy_errors
 from google.appengine.api import users
+from google.appengine.api.app_identity import get_application_id
 
 import os
 import google_api
@@ -29,7 +30,7 @@ class RegistrationHandler(ecal.EcalRequestHandler):
                 }
             self.respond_with_template('error.html', template_values)
             return
-        template_values = { 'email_address': myuser.email_address + '@' + os.environ['APPLICATION_ID'] + '.appspotmail.com' }
+        template_values = { 'email_address': myuser.email_address + '@' + get_application_id() + '.appspotmail.com' }
         self.respond_with_template('success.html', template_values)
 
     def get(self):

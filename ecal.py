@@ -8,6 +8,7 @@ import random
 import string
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from google.appengine.api.app_identity import get_application_id
 import google_api
 import os
 import atom.url
@@ -70,7 +71,7 @@ class EcalWSGIApplication(webapp.WSGIApplication):
 class EcalRequestHandler(webapp.RequestHandler):
     def canonical(self, path):
         if os.environ['SERVER_PORT'] == '443':
-            server = 'https://' + os.environ['APPLICATION_ID'] + 'appspot.com'
+            server = 'https://' + get_application_id() + 'appspot.com'
         else:
             server = 'http://www.myeventbot.com'
         # TODO: canonical URL below sometimes (always?) has an extra
@@ -81,7 +82,7 @@ class EcalRequestHandler(webapp.RequestHandler):
     def global_template_vals(self):
         return {
             'canonical': self.canonical(self.request.path),
-            'auth_link': atom.url.Url('https', os.environ['APPLICATION_ID'] + '.appspot.com', path='/authorize')
+            'auth_link': atom.url.Url('https', get_application_id() + '.appspot.com', path='/authorize')
             }
     
     def respond_with_template(self, name, values):
