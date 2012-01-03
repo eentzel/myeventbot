@@ -14,7 +14,7 @@ class StatsUpdater(ecal.EcalRequestHandler):
         self.update_events_created()
         self.update_unique_users()
         self.update_signups()
-        
+
     def init_timeperiod(self):
         one_day = datetime.timedelta(days=1)
         if self.request.get('day'):

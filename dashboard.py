@@ -40,7 +40,7 @@ class DashboardHandler(ecal.EcalRequestHandler):
     @staticmethod
     def format_day(day):
         return '<span class="month">%s</span><span class="day">%d</span>' % (day.strftime('%b'), day.day)
-        
+
     def get(self):
         today_start = datetime.datetime.today().replace(hour=0, minute=0,
                                                         second=0, microsecond=0)

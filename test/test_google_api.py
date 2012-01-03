@@ -47,6 +47,6 @@ class AddEvent(unittest.TestCase):
     def tearDown(self):
         google_api.delete_event_using_token(self.event.GetEditLink().href, AddEvent.test_token)
 
-        
+
 if __name__ == "__main__":
     unittest.main()

@@ -27,7 +27,7 @@ class GetUser(unittest.TestCase):
         self.assertTrue(hasattr(result, 'auth_token'))
         self.assertTrue(hasattr(result, 'date_added'))
         self.assertTrue(hasattr(result, 'last_action'))
-        
+
     def testNonExistentUser(self):
         self.evt_handler.request.path = '/_ah/mail/non_existent_user%40myeventbot.appspotmail.com'
         result = self.evt_handler._get_user()
@@ -100,7 +100,7 @@ class FormatDate(unittest.TestCase):
 
               # Zulu timezone
               ("2011-06-11T15:20:12.000Z", "Sat Jun 11 3:20 PM"),
-              
+
               # Corner cases:
               ("2011-01-01T00:00:00.000-06:00", "Sat Jan 1 12:00 AM"),
               ("2011-01-01T15:40:12.000-06:00", "Sat Jan 1 3:40 PM"),

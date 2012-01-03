@@ -84,7 +84,7 @@ class EcalRequestHandler(webapp.RequestHandler):
             'canonical': self.canonical(self.request.path),
             'auth_link': atom.url.Url('https', get_application_id() + '.appspot.com', path='/authorize')
             }
-    
+
     def respond_with_template(self, name, values):
         # TODO: use posixpath.normalize() or some form of whitelisting
         # see http://lucumr.pocoo.org/2010/12/24/common-mistakes-as-web-developer/

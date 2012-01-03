@@ -61,7 +61,7 @@ class NoSuchAddressHandler(FeedbackHandler):
         self.message = message
         self.adr = adr
         self.warning = "Couldn't create event for user with address " + self.adr
-        
+
     def values(self):
         return { 'address': self.adr,
                  'subject': self.message.subject }
@@ -79,7 +79,7 @@ class SuccessHandler(FeedbackHandler):
                  'when': CreateEventHandler._format_date(start_time),
                  'title': self.event.title.text }
 
-    
+
 class TokenRevokedHandler(FeedbackHandler):
     template_name = 'token_revoked'
     def __init__(self, message, adr):
@@ -89,8 +89,8 @@ class TokenRevokedHandler(FeedbackHandler):
     def values(self):
         return { 'address': self.adr,
                  'subject': self.message.subject }
-        
-        
+
+
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
     # /_ah/mail/f832ofhAau%40myeventbot.appspotmail.com
@@ -111,7 +111,7 @@ class CreateEventHandler(InboundMailHandler):
             date = datetime.strptime(str, "%Y-%m-%dT%H:%M:%S")
             retval = date.strftime("%a %b %e %I:%M %p")
         except ValueError:
-            date = datetime.strptime(str, "%Y-%m-%d")            
+            date = datetime.strptime(str, "%Y-%m-%d")
             retval = date.strftime("%a %b %e")
         retval = retval.replace('  ', ' ')
         retval = retval.replace(' 0', ' ')
