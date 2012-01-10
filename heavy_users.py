@@ -1,3 +1,4 @@
+from collections import defaultdict
 import re
 import time
 
@@ -11,11 +12,13 @@ import ecal
 class HeavyUsersHandler(ecal.EcalRequestHandler):
     def get(self):
         start_time = time.time() - 24 * 60 * 60
-        logs = logservice.fetch(start_time=start_time)
-        unique_users = set([l.resource.replace('/_ah/mail/', '')
-                            for l in logs
-                            if l.resource.startswith('/_ah/mail/')])
-        self.response.out.write(unique_users)
+        users = (l.resource.replace('/_ah/mail/', '')
+                 for l in logservice.fetch(start_time=start_time)
+                 if l.resource.startswith('/_ah/mail/'))
+        user_counts = defaultdict(int)
+        for u in users:
+            user_counts[u] += 1
+        self.response.out.write(user_counts)
 
 
 def main():
