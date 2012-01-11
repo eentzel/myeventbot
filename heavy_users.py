@@ -23,8 +23,13 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
                        if l.resource.startswith('/_ah/mail/'))
         counts = sorted([(iterlen(group), key) for key, group in
                          itertools.groupby(users, fst)],
-                        reverse=True)
-        self.response.out.write(counts)
+                        reverse=True)[:30]
+        query = ecal.EcalUser.gql("WHERE email_address in :e",
+                                  e=[c[1].split("@")[0] for c in counts])
+        user_records = query.fetch(30)
+        self.response.out.write([(count, email, rec.send_email)
+                                 for ((count, email), rec)
+                                 in zip(counts, user_records)])
 
 
 def main():
