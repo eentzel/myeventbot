@@ -1,4 +1,5 @@
 from collections import defaultdict
+import itertools
 import re
 import time
 
@@ -7,18 +8,23 @@ from google.appengine.api import logservice
 import ecal
 
 
+def fst(t):
+    return t[0]
+
+def iterlen(i):
+    return len(list(i))
 
 
 class HeavyUsersHandler(ecal.EcalRequestHandler):
     def get(self):
         start_time = time.time() - 24 * 60 * 60
-        users = (l.resource.replace('/_ah/mail/', '')
-                 for l in logservice.fetch(start_time=start_time)
-                 if l.resource.startswith('/_ah/mail/'))
-        user_counts = defaultdict(int)
-        for u in users:
-            user_counts[u] += 1
-        self.response.out.write(user_counts)
+        users = sorted((l.resource.replace('/_ah/mail/', ''), 1)
+                       for l in logservice.fetch(start_time=start_time)
+                       if l.resource.startswith('/_ah/mail/'))
+        counts = sorted([(iterlen(group), key) for key, group in
+                         itertools.groupby(users, fst)],
+                        reverse=True)
+        self.response.out.write(counts)
 
 
 def main():
