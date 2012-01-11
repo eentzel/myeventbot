@@ -14,16 +14,20 @@ def fst(t):
 def iterlen(i):
     return len(list(i))
 
+def top_30_users(logs):
+    users = sorted((l.resource.replace('/_ah/mail/', ''), 1)
+                   for l in logs
+                   if l.resource.startswith('/_ah/mail/'))
+    return sorted([(iterlen(group), key) for key, group in
+                   itertools.groupby(users, fst)],
+                  reverse=True)[:30]
+
 
 class HeavyUsersHandler(ecal.EcalRequestHandler):
+
     def get(self):
         start_time = time.time() - 24 * 60 * 60
-        users = sorted((l.resource.replace('/_ah/mail/', ''), 1)
-                       for l in logservice.fetch(start_time=start_time)
-                       if l.resource.startswith('/_ah/mail/'))
-        counts = sorted([(iterlen(group), key) for key, group in
-                         itertools.groupby(users, fst)],
-                        reverse=True)[:30]
+        counts = top_30_users(logservice.fetch(start_time=start_time))
         query = ecal.EcalUser.gql("WHERE email_address in :e",
                                   e=[c[1].split("@")[0] for c in counts])
         user_records = query.fetch(30)
