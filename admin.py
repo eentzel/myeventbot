@@ -12,6 +12,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.api import logservice
 
 import ecal
+import rest
 
 
 DAYS_OF_HISTORY = 9
@@ -51,8 +52,8 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
                     'email': email,
                     'send_confirmation': rec.send_emails,
                     # build REST api with http://code.google.com/p/appengine-rest-server/
-                    'toggle_url': '/admin/user/%s?send_email=%s' % (
-                        rec.key(), not rec.send_emails)
+                    'toggle_url': '/admin/rest/user/%s/send_emails' % (
+                        rec.key())
                     }
                       for ((count, email), rec)
                       in zip(counts, user_records)]
@@ -97,8 +98,14 @@ class DashboardHandler(ecal.EcalRequestHandler):
                 'uniques': self.ecal_stat('unique-users')})
 
 
+rest.Dispatcher.base_url = '/admin/rest'
+rest.Dispatcher.add_models({
+        'user': ecal.EcalUser
+        })
+
 def main():
     application = ecal.EcalWSGIApplication([
+            ('/admin/rest/.*', rest.Dispatcher),
             ('/admin/dashboard', DashboardHandler),
             ('/admin/heavy_users', HeavyUsersHandler)])
     util.run_wsgi_app(application)

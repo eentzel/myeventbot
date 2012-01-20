@@ -22,7 +22,10 @@
                             <td>{{u.count}}</td>
                             <td>
                                 {{u.send_confirmation}}
-                                (<a href="{{u.toggle_url}}" target="_blank">toggle</a>)
+                                <form action="{{u.toggle_url}}" method="post">
+                                    <input type="hidden" name="False" value="false"/>
+                                    <input type="submit" value="disable" />
+                                </form>
                             </td>
                             <td>logs</td>
                         </tr>
