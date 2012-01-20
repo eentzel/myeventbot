@@ -3,7 +3,13 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 import datetime
+from collections import defaultdict
+import itertools
+import re
+import time
+
 from google.appengine.ext.webapp import util
+from google.appengine.api import logservice
 
 import ecal
 
@@ -16,6 +22,32 @@ def value_from_list(list, func, default=0):
     if len(matches) == 0:
         return default
     return matches[0].value
+
+def fst(t):
+    return t[0]
+
+def iterlen(i):
+    return len(list(i))
+
+def top_30_users(logs):
+    users = sorted((l.resource.replace('/_ah/mail/', ''), 1)
+                   for l in logs
+                   if l.resource.startswith('/_ah/mail/'))
+    return sorted([(iterlen(group), key) for key, group in
+                   itertools.groupby(users, fst)],
+                  reverse=True)[:30]
+
+
+class HeavyUsersHandler(ecal.EcalRequestHandler):
+    def get(self):
+        start_time = time.time() - 24 * 60 * 60
+        counts = top_30_users(logservice.fetch(start_time=start_time))
+        query = ecal.EcalUser.gql("WHERE email_address in :e",
+                                  e=[c[1].split("@")[0] for c in counts])
+        user_records = query.fetch(30)
+        self.response.out.write([(count, email, rec.send_emails)
+                                 for ((count, email), rec)
+                                 in zip(counts, user_records)])
 
 
 class DashboardHandler(ecal.EcalRequestHandler):
@@ -56,7 +88,9 @@ class DashboardHandler(ecal.EcalRequestHandler):
 
 
 def main():
-    application = ecal.EcalWSGIApplication([('/admin/dashboard', DashboardHandler)])
+    application = ecal.EcalWSGIApplication([
+            ('/admin/dashboard', DashboardHandler),
+            ('/admin/heavy_users', HeavyUsersHandler)])
     util.run_wsgi_app(application)
 
 

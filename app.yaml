@@ -38,9 +38,6 @@ handlers:
 - url: /update_stats
   script: update_stats.py
   login: admin
-- url: /heavy_users
-  script: heavy_users.py
-  login: admin
 
 admin_console:
   pages:
