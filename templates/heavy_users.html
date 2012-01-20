@@ -27,7 +27,9 @@
                                     <input type="submit" value="disable" />
                                 </form>
                             </td>
-                            <td>logs</td>
+                            <td>
+                                <a href="https://appengine.google.com/logs?app_id=s~myeventbot-hrd&amp;version_id=master&amp;severity_level_override=1&amp;severity_level=3&amp;filter=path%3A%2F_ah%2Fmail%2F{{u.email}}.*&amp;filter_type=labels&amp;date_type=now&amp;limit=20&amp;view=Search">logs</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
