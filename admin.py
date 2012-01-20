@@ -56,7 +56,7 @@ class DashboardHandler(ecal.EcalRequestHandler):
 
 
 def main():
-    application = ecal.EcalWSGIApplication([('/dashboard', DashboardHandler)])
+    application = ecal.EcalWSGIApplication([('/admin/dashboard', DashboardHandler)])
     util.run_wsgi_app(application)
 
 
