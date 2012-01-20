@@ -45,9 +45,19 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         query = ecal.EcalUser.gql("WHERE email_address in :e",
                                   e=[c[1].split("@")[0] for c in counts])
         user_records = query.fetch(30)
-        self.response.out.write([(count, email, rec.send_emails)
-                                 for ((count, email), rec)
-                                 in zip(counts, user_records)])
+        template_vals = {
+            'users': [{
+                    'count': count,
+                    'email': email,
+                    'send_confirmation': rec.send_emails,
+                    # build REST api with http://code.google.com/p/appengine-rest-server/
+                    'toggle_url': '/admin/user/%s?send_email=%s' % (
+                        rec.key(), not rec.send_emails)
+                    }
+                      for ((count, email), rec)
+                      in zip(counts, user_records)]
+            }
+        self.respond_with_template('heavy_users.html', template_vals)
 
 
 class DashboardHandler(ecal.EcalRequestHandler):

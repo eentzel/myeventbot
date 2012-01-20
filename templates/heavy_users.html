@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <title>EventBot: Heavy users</title>
+        <link rel="stylesheet" href="/static/dashboard.css" type="text/css" />
+        <meta name="robots" content="noindex" />
+        <meta name="description" content="Heavy users for EventBot" />
+    </head>
+    <body>
+        <div id="content">
+            <table>
+                <thead><tr>
+                    <th>User</th>
+                    <th>Events in past 24 hours</th>
+                    <th>Confirmation emails?</th>
+                </tr></thead>
+                <tbody>
+                    {% for u in users %}
+                        <tr>
+                            <td>{{u.email}}</td>
+                            <td>{{u.count}}</td>
+                            <td>
+                                {{u.send_confirmation}}
+                                (<a href="{{u.toggle_url}}" target="_blank">toggle</a>)
+                            </td>
+                            <td>logs</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
