@@ -74,10 +74,16 @@ class SuccessHandler(FeedbackHandler):
         self.event = event
 
     def values(self):
-        start_time = self.event.FindExtensions(tag='when')[0].attributes['startTime']
-        return { 'link': self.event.GetHtmlLink().href,
-                 'when': CreateEventHandler._format_date(start_time),
-                 'title': self.event.title.text }
+        when = self.event.FindExtensions(tag='when')
+        if len(when) > 0:
+            start_time = when[0].attributes['startTime']
+            return { 'link': self.event.GetHtmlLink().href,
+                     'when': CreateEventHandler._format_date(start_time),
+                     'title': self.event.title.text }
+        else:
+            logging.warn("returned event had no startTime")
+            logging.warn(self.event.ToString())
+            return when[0]      # intentional exception
 
 
 class TokenRevokedHandler(FeedbackHandler):
