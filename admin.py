@@ -51,7 +51,6 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
                     'count': count,
                     'email': email.split("@")[0],
                     'send_confirmation': rec.send_emails,
-                    # build REST api with http://code.google.com/p/appengine-rest-server/
                     'toggle_url': '/admin/rest/user/%s/send_emails' % (
                         rec.key())
                     }
