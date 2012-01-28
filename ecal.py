@@ -101,13 +101,10 @@ class EcalWSGIApplication(webapp.WSGIApplication):
 class EcalRequestHandler(webapp.RequestHandler):
     def canonical(self, path):
         if os.environ['SERVER_PORT'] == '443':
-            server = 'https://' + get_application_id() + 'appspot.com'
+            server = current_environment()['secure_base_url']
         else:
-            server = 'http://www.myeventbot.com'
-        # TODO: canonical URL below sometimes (always?) has an extra
-        # '/'.  Need to devise a unit test to catch this, and then
-        # fix.
-        return server + '/' + path
+            server = current_environment()['base_url']
+        return server + path
 
     def global_template_vals(self):
         return {
