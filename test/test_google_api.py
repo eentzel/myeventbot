@@ -10,19 +10,26 @@ import google_api
 
 
 class AuthLink(unittest.TestCase):
-    def testAuthLink(self):
-        secure = '1'
-        if google_api.debug:
-            secure = '0'
-        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=" + secure + "&next=https%3A%2F%2F" + get_application_id() + ".appspot.com%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
-        self.assertEqual(google_api.generate_auth_link(), expected)
+    def testInLocalEnv(self):
+        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&next=http%3A%2F%2Flocalhost%3A8000%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
+        self.assertEqual(google_api.generate_auth_link(app_version='testing'),
+                         expected)
+
+    def testInStagingEnv(self):
+        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&next=http%3A%2F%2Fstaging.myeventbot-hrd.appspot.com%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
+        self.assertEqual(google_api.generate_auth_link(app_version='staging'),
+                         expected)
+
+    def testInProdEnv(self):
+        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=1&next=https%3A%2F%2Fmyeventbot-hrd.appspot.com%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
+        self.assertEqual(google_api.generate_auth_link(app_version='master'),
+                         expected)
 
 
 class TempTokenFromUrl(unittest.TestCase):
     def testToken(self):
         url = 'https://myeventbot.appspot.com/register?auth_sub_scopes=https://www.google.com/calendar/feeds/default/private/full&token=1/RuM6SMYS9qDY3oUW-rO9EJlNXOvagzEKo6u0lRld758'
         result =  google_api.temp_token_from_url(url)
-        self.assertEqual(not google_api.debug, hasattr(result, 'rsa_key'))
         self.assertEqual(result.get_token_string(), '1/RuM6SMYS9qDY3oUW-rO9EJlNXOvagzEKo6u0lRld758')
 
 

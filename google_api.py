@@ -6,15 +6,11 @@ import gdata.service
 import gdata.alt.appengine
 from google.appengine.api.app_identity import get_application_id
 
+import ecal
+
 
 GCAL_FEED = 'https://www.google.com/calendar/feeds/default/private/full'
-rsa_key = None
 # TODO: always use secure tokens, need a separate RSA key for dev, staging, prod
-debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')
-if not debug:
-    f = open(os.path.join(os.path.dirname(__file__), 'myrsakey.pem'))
-    rsa_key = f.read()
-    f.close()
 
 
 def get_client():
@@ -24,7 +20,8 @@ def get_client():
 
 def get_client_with_token(token_str):
     client = get_client()
-    if debug:
+    rsa_key = ecal.get_environment()['rsa_key']
+    if rsa_key is None:
         token = gdata.auth.AuthSubToken()
     else:
         token = gdata.auth.SecureAuthSubToken(rsa_key)
@@ -32,14 +29,14 @@ def get_client_with_token(token_str):
     client.current_token = token
     return client
 
-def generate_auth_link():
-    # TODO: make a table of env differences in (prod, staging, local)
-    # and isolate those into one place
-    next_url = atom.url.Url('https', get_application_id() + '.appspot.com', path='/register')
+def generate_auth_link(app_version=None):
+    env = ecal.get_environment(app_version)
+    register_url = env['secure_base_url'] + '/register'
+    secure = (env['rsa_key'] is not None)
     client = get_client()
-    url = client.GenerateAuthSubURL(next_url,
+    url = client.GenerateAuthSubURL(register_url,
                                     GCAL_FEED,
-                                    secure=(not debug),
+                                    secure=secure,
                                     session=True,
                                     # lets the URL work with Google
                                     # Apps calendars as well as
@@ -48,7 +45,8 @@ def generate_auth_link():
     return str(url)
 
 def temp_token_from_url(url):
-    return gdata.auth.extract_auth_sub_token_from_url(url, rsa_key=rsa_key)
+    return gdata.auth.extract_auth_sub_token_from_url(
+        url, rsa_key=ecal.get_environment()['rsa_key'])
 
 def permanent_token_from_temp_token(temp_token):
     session_token = None
