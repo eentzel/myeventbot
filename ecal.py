@@ -21,7 +21,7 @@ LOTS_OF_RESULTS = 999999
 
 
 # TODO: @memoize
-def current_environment():
+def get_environment(version=None):
     app_id = app_identity.get_application_id()
     environments = {
         'testing': {
@@ -39,7 +39,8 @@ def current_environment():
             'secure_base_url':
                 'https://%s.appspot.com' % (app_id),
             'rsa_key': load_rsa_key() } }
-    version = os.environ['CURRENT_VERSION_ID'].split('.')[0]
+    if version is None:
+        version = os.environ['CURRENT_VERSION_ID'].split('.')[0]
     return environments[version]
 
 def load_rsa_key():
@@ -102,15 +103,15 @@ class EcalWSGIApplication(webapp.WSGIApplication):
 class EcalRequestHandler(webapp.RequestHandler):
     def canonical(self, path):
         if os.environ['SERVER_PORT'] == '443':
-            server = current_environment()['secure_base_url']
+            server = get_environment()['secure_base_url']
         else:
-            server = current_environment()['base_url']
+            server = get_environment()['base_url']
         return server + path
 
     def global_template_vals(self):
         return {
             'canonical': self.canonical(self.request.path),
-            'auth_link': current_environment()['secure_base_url'] + '/authorize'
+            'auth_link': get_environment()['secure_base_url'] + '/authorize'
             }
 
     def respond_with_template(self, name, values):
