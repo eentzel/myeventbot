@@ -7,10 +7,10 @@ import os
 import random
 import string
 
+from google.appengine.api import app_identity
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-from google.appengine.api.app_identity import get_application_id
 
 import google_api
 import settings
@@ -20,7 +20,9 @@ import settings
 LOTS_OF_RESULTS = 999999
 
 
+# TODO: @memoize
 def current_environment():
+    app_id = app_identity.get_application_id()
     environments = {
         'testing': {
             'base_url': 'http://%s' % (settings.HOST_NAME),
@@ -28,14 +30,14 @@ def current_environment():
             'rsa_key': None },
         'staging': {
             'base_url':
-                'http://%s.%s.appspot.com' % ('staging', get_application_id()),
+                'http://%s.%s.appspot.com' % ('staging', app_id),
             'secure_base_url':
-                'http://%s.%s.appspot.com' % ('staging', get_application_id()),
+                'http://%s.%s.appspot.com' % ('staging', app_id),
             'rsa_key': None },
         'master': {
             'base_url': 'http://www.myeventbot.com',
             'secure_base_url':
-                'https://%s.appspot.com' % (get_application_id()),
+                'https://%s.appspot.com' % (app_id),
             'rsa_key': load_rsa_key() } }
     version = os.environ['CURRENT_VERSION_ID'].split('.')[0]
     return environments[version]
