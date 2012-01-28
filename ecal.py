@@ -21,6 +21,33 @@ import settings
 LOTS_OF_RESULTS = 999999
 
 
+def current_environment():
+    environments = {
+        'testing': {
+            'base_url': 'http://%s/' % (settings.HOST_NAME),
+            'secure_base_url': 'http://%s/' % (settings.HOST_NAME),
+            'rsa_key': None },
+        'staging': {
+            'base_url':
+                'http://%s.%s.appspot.com/' % ('staging', get_application_id()),
+            'secure_base_url':
+                'http://%s.%s.appspot.com/' % ('staging', get_application_id()),
+            'rsa_key': None },
+        'master': {
+            'base_url': 'http://www.myeventbot.com/',
+            'secure_base_url':
+                'https://%s.appspot.com/' % (get_application_id()),
+            'rsa_key': load_rsa_key() } }
+    version = os.environ['CURRENT_VERSION_ID'].split('.')[0]
+    return environments[version]
+
+def load_rsa_key():
+    f = open(os.path.join(os.path.dirname(__file__), 'myrsakey.pem'))
+    rsa_key = f.read()
+    f.close()
+    return rsa_key
+
+
 class RandomAddressProperty(db.StringProperty):
     def default_value(self):
         """

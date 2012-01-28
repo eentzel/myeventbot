@@ -89,6 +89,7 @@ class DashboardHandler(ecal.EcalRequestHandler):
         self.one_day = datetime.timedelta(days=1)
         self.days = [today_start - i * self.one_day for i in xrange(0, DAYS_OF_HISTORY)]
         self.respond_with_template('dashboard.html', {
+                'env': ecal.current_environment(),
                 'signups': self.ecal_stat('signups'),
                 'all_users': len(self.all_users()),
                 'active_users': len(self.active_users()),
