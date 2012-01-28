@@ -7,7 +7,6 @@ import os
 import random
 import string
 
-import atom.url
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -109,7 +108,7 @@ class EcalRequestHandler(webapp.RequestHandler):
     def global_template_vals(self):
         return {
             'canonical': self.canonical(self.request.path),
-            'auth_link': atom.url.Url('https', get_application_id() + '.appspot.com', path='/authorize')
+            'auth_link': current_environment()['secure_base_url'] + '/authorize'
             }
 
     def respond_with_template(self, name, values):
