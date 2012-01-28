@@ -3,15 +3,18 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 
-from google.appengine.ext import db
+import os
 import random
 import string
+
+import atom.url
+from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.api.app_identity import get_application_id
+
 import google_api
-import os
-import atom.url
+import settings
 
 
 # Constant for datstore queries:
