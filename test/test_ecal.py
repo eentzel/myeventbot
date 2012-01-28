@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 import unittest
+
 import ecal
+import settings
 
 
 class MakeAddress(unittest.TestCase):
@@ -15,8 +17,8 @@ class GetEnvironment(unittest.TestCase):
     def testInLocalEnv(self):
         env = ecal.get_environment(version='testing')
         self.assertEqual(env, {
-                'base_url': 'http://localhost:8000',
-                'secure_base_url': 'http://localhost:8000',
+                'base_url': 'http://%s' % (settings.HOST_NAME),
+                'secure_base_url': 'http://%s' % (settings.HOST_NAME),
                 'rsa_key': None })
 
     def testInStagingEnv(self):
