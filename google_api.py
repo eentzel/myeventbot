@@ -40,6 +40,9 @@ def generate_auth_link():
                                     GCAL_FEED,
                                     secure=(not debug),
                                     session=True,
+                                    # lets the URL work with Google
+                                    # Apps calendars as well as
+                                    # calendar.google.com ones:
                                     domain=None)
     return str(url)
 
