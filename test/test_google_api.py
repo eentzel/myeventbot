@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
-import google_api
-import unittest
-import re
 import os
+import re
+import unittest
+
 from google.appengine.api.app_identity import get_application_id
+
+import google_api
 
 
 class AuthLink(unittest.TestCase):
