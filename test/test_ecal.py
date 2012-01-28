@@ -25,7 +25,7 @@ class GetEnvironment(unittest.TestCase):
         env = ecal.get_environment(version='staging')
         self.assertEqual(env, {
                 'base_url': 'http://staging.myeventbot-hrd.appspot.com',
-                'secure_base_url': 'http://staging.myeventbot-hrd.appspot.com',
+                'secure_base_url': 'https://staging.myeventbot-hrd.appspot.com',
                 'rsa_key': None })
 
     def testInProdEnv(self):

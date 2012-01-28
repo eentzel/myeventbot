@@ -32,7 +32,7 @@ def get_environment(version=None):
             'base_url':
                 'http://%s.%s.appspot.com' % ('staging', app_id),
             'secure_base_url':
-                'http://%s.%s.appspot.com' % ('staging', app_id),
+                'https://%s.%s.appspot.com' % ('staging', app_id),
             'rsa_key': None },
         'master': {
             'base_url': 'http://www.myeventbot.com',

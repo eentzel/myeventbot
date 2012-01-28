@@ -20,7 +20,7 @@ class AuthLink(unittest.TestCase):
                          expected)
 
     def testInStagingEnv(self):
-        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&next=http%3A%2F%2Fstaging.myeventbot-hrd.appspot.com%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
+        expected = "https://www.google.com/accounts/AuthSubRequest?scope=https%3A%2F%2Fwww.google.com%2Fcalendar%2Ffeeds%2Fdefault%2Fprivate%2Ffull&session=1&secure=0&next=https%3A%2F%2Fstaging.myeventbot-hrd.appspot.com%2Fregister%3Fauth_sub_scopes%3Dhttps%253A%252F%252Fwww.google.com%252Fcalendar%252Ffeeds%252Fdefault%252Fprivate%252Ffull"
         self.assertEqual(google_api.generate_auth_link(app_version='staging'),
                          expected)
 
