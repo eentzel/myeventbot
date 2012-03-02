@@ -148,7 +148,7 @@ class CreateEventHandler(InboundMailHandler):
         self.receive(mail.InboundEmailMessage(new_body))
 
     def receive(self, message):
-        if not hasattr(message, 'subject'):
+        if not hasattr(message, 'subject') and current_user.send_emails:
             NoSubjectHandler(message).send()
             return
         current_user = self._get_user()
@@ -168,7 +168,8 @@ class CreateEventHandler(InboundMailHandler):
                 # Can we log the headers of the POST we sent, to see
                 # if there's anything obviously wrong with them?
                 logging.exception("Token doesn't appear to be valid anymore")
-                TokenRevokedHandler(message, self._get_email_address()).send()
+                if current_user.send_emails:
+                    TokenRevokedHandler(message, self._get_email_address()).send()
             else:
                 # Don't know what the error is, let's re-raise it so
                 # it gets logged and the message retried
