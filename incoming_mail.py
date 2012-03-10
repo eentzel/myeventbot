@@ -148,12 +148,12 @@ class CreateEventHandler(InboundMailHandler):
         self.receive(mail.InboundEmailMessage(new_body))
 
     def receive(self, message):
-        if not hasattr(message, 'subject') and current_user.send_emails:
-            NoSubjectHandler(message).send()
-            return
         current_user = self._get_user()
         if current_user == None:
             NoSuchAddressHandler(message, self._get_email_address()).send()
+            return
+        if not hasattr(message, 'subject') and current_user.send_emails:
+            NoSubjectHandler(message).send()
             return
         token = current_user.auth_token
         message.subject = CreateEventHandler.header_to_utf8(message.subject)
