@@ -61,16 +61,12 @@ __url__ = "http://code.google.com/p/gaeunit"
 import sys
 import os
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-
 import unittest
 import time
 import logging
 import cgi
 import re
-import django.utils.simplejson
+import json
 
 from xml.sax.saxutils import unescape
 from google.appengine.ext import webapp
@@ -78,7 +74,7 @@ from google.appengine.api import apiproxy_stub_map
 from google.appengine.api import datastore_file_stub
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-_LOCAL_TEST_DIR = '../test'  # location of files
+_LOCAL_TEST_DIR = 'test'  # location of files
 _WEB_TEST_DIR = '/test'   # how you want to refer to tests on your web server
 _LOCAL_DJANGO_TEST_DIR = '../../gaeunit/test'
 
@@ -289,7 +285,7 @@ class JsonTestResult(unittest.TestResult):
             'failures': self._list(self.failures),
             }
 
-        stream.write(django.utils.simplejson.dumps(result).replace('},', '},\n'))
+        stream.write(json.dumps(result).replace('},', '},\n'))
 
     def _list(self, list):
         dict = []
@@ -411,7 +407,7 @@ def _test_suite_to_json(suite):
                 method_list = mod_dict[class_name]
                 method_list.append(method_name)
                 
-    return django.utils.simplejson.dumps(test_dict)
+    return json.dumps(test_dict)
 
 
 def _run_test_suite(runner, suite):
