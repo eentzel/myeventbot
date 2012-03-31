@@ -102,7 +102,7 @@ class EcalWSGIApplication(webapp.WSGIApplication):
 
 class EcalRequestHandler(webapp.RequestHandler):
     def canonical(self, path):
-        if os.environ['SERVER_PORT'] == '443':
+        if self.request.environ['SERVER_PORT'] == '443':
             server = get_environment()['secure_base_url']
         else:
             server = get_environment()['base_url']
