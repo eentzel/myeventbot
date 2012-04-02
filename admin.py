@@ -102,13 +102,7 @@ rest.Dispatcher.add_models({
         'user': ecal.EcalUser
         })
 
-def main():
-    application = ecal.EcalWSGIApplication([
-            ('/admin/rest/.*', rest.Dispatcher),
-            ('/admin/dashboard', DashboardHandler),
-            ('/admin/heavy_users', HeavyUsersHandler)])
-    util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-    main()
+app = ecal.EcalWSGIApplication([
+        ('/admin/rest/.*', rest.Dispatcher),
+        ('/admin/dashboard', DashboardHandler),
+        ('/admin/heavy_users', HeavyUsersHandler)])

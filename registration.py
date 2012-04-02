@@ -45,10 +45,4 @@ class RegistrationHandler(ecal.EcalRequestHandler):
                 self.authorization_denied()
 
 
-def main():
-    application = ecal.EcalWSGIApplication([('/.*', RegistrationHandler)])
-    util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-    main()
+app = ecal.EcalWSGIApplication([('/.*', RegistrationHandler)])

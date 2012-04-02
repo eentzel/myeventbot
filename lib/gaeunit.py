@@ -593,13 +593,7 @@ _MAIN_PAGE_CONTENT = """
 ##############################################################################
 
 
-application = webapp.WSGIApplication([('%s'      % _WEB_TEST_DIR, MainTestPageHandler),
-                                      ('%s/run'  % _WEB_TEST_DIR, JsonTestRunHandler),
-                                      ('%s/list' % _WEB_TEST_DIR, JsonTestListHandler)],
-                                      debug=True)
-
-def main():
-    run_wsgi_app(application)                                    
-
-if __name__ == '__main__':
-    main()
+app = webapp.WSGIApplication([('%s'      % _WEB_TEST_DIR, MainTestPageHandler),
+                              ('%s/run'  % _WEB_TEST_DIR, JsonTestRunHandler),
+                              ('%s/list' % _WEB_TEST_DIR, JsonTestListHandler)],
+                             debug=True)

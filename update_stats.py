@@ -69,10 +69,4 @@ class StatsUpdater(ecal.EcalRequestHandler):
         signups.put()
 
 
-def main():
-    application = ecal.EcalWSGIApplication([('/update_stats', StatsUpdater)])
-    util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-    main()
+app = ecal.EcalWSGIApplication([('/update_stats', StatsUpdater)])

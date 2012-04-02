@@ -7,10 +7,10 @@ api_version: 1
 default_expiration: "4h"
 
 handlers:
-- url: /_ah/mail/.+ 
-  script: incoming_mail.py
+- url: /_ah/mail/.+
+  script: incoming_mail.app
 - url: /.*\.html|/
-  script: static_html.py
+  script: static_html.app
 - url: /static
   static_dir:  static
 - url: /version.txt
@@ -25,19 +25,19 @@ handlers:
   static_files: static/robots.txt
   upload: static/robots.txt
 - url: /register
-  script: registration.py
+  script: registration.app
   secure: always
 - url: /authorize
-  script: registration.py
+  script: registration.app
   login: required
 - url: /test.*
-  script: lib/gaeunit.py
+  script: lib.gaeunit.app
   login: admin
 - url: /admin/.*
-  script: admin.py
+  script: admin.app
   login: admin
 - url: /update_stats
-  script: update_stats.py
+  script: update_stats.app
   login: admin
 
 admin_console:

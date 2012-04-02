@@ -17,10 +17,4 @@ class StaticHandler(ecal.EcalRequestHandler):
         self.respond_with_template(path, {})
 
 
-def main():
-    application = ecal.EcalWSGIApplication([(r'/(.*)', StaticHandler)])
-    util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-    main()
+app = ecal.EcalWSGIApplication([(r'/(.*)', StaticHandler)])

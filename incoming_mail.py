@@ -186,9 +186,4 @@ class CreateEventHandler(InboundMailHandler):
             SuccessHandler(message, event).send()
 
 
-def main():
-    application = ecal.EcalWSGIApplication([CreateEventHandler.mapping()])
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-  main()
+app = ecal.EcalWSGIApplication([CreateEventHandler.mapping()])
