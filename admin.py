@@ -8,7 +8,6 @@ import itertools
 import re
 import time
 
-from google.appengine.ext.webapp import util
 from google.appengine.api import logservice
 
 import ecal

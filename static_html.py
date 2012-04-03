@@ -2,7 +2,6 @@
 #
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
-from google.appengine.ext.webapp import util
 import ecal
 
 

@@ -4,7 +4,6 @@
 #
 
 import ecal
-from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.api import mail
 from google.appengine.runtime import apiproxy_errors

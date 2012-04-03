@@ -2,7 +2,6 @@
 #
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
-from google.appengine.ext.webapp import util
 from google.appengine.runtime import apiproxy_errors
 from google.appengine.api import users
 from google.appengine.api.app_identity import get_application_id
