@@ -131,7 +131,7 @@ class CreateEventHandler(InboundMailHandler):
             parts = decode_header(header)
             decoded = [value.decode(charset or default) for value, charset in parts]
             return u"".join(decoded).encode('utf-8')
-        except UnicodeDecodeError, err:
+        except UnicodeDecodeError, _:
             logging.exception("Couldn't decode header: " + pickle.dumps(header))
 
     @staticmethod

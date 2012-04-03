@@ -67,7 +67,7 @@ class RandomAddressProperty(db.StringProperty):
         """
         chars = string.lowercase + string.digits
         chars = chars.translate(string.maketrans('', ''), 'ol01')
-        return ''.join([ random.choice(chars) for i in range(9) ])
+        return ''.join([ random.choice(chars) for _ in range(9) ])
 
 
 class EcalUser(db.Model):
