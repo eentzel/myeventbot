@@ -6,7 +6,6 @@ from google.appengine.runtime import apiproxy_errors
 from google.appengine.api import users
 from google.appengine.api.app_identity import get_application_id
 
-import os
 import google_api
 import ecal
 

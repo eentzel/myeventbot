@@ -1,10 +1,7 @@
-import os
 from xml.sax.saxutils import escape
 
-import atom.url
 import gdata.service
 import gdata.alt.appengine
-from google.appengine.api.app_identity import get_application_id
 
 import ecal
 

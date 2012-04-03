@@ -12,7 +12,6 @@ from google.appengine.ext import db
 import webapp2
 from webapp2_extras import jinja2
 
-import google_api
 import settings
 
 

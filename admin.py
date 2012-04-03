@@ -3,9 +3,7 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 import datetime
-from collections import defaultdict
 import itertools
-import re
 import time
 
 from google.appengine.api import logservice
