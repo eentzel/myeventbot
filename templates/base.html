@@ -12,10 +12,10 @@
         <div id="content">
             <img src="/static/logo.jpg" class="logo" alt="EventBot: Personal Calendar Assistant" />
             <ul id="navigation">
-                <li>{% block nav-home %}<a href="/">Home</a>{% endblock %}</li>
-                <li>{% block nav-how %}<a href="/how.html">How Does it Work?</a>{% endblock %}</li>
-                <li>{% block nav-blog %}<a href="http://blog.myeventbot.com">Blog</a>{% endblock %}</li>
-                <li>{% block nav-signup %}<a rel="nofollow" href="{{auth_link}}">Sign Up</a>{% endblock %}</li>
+                <li>{% block nav_home %}<a href="/">Home</a>{% endblock %}</li>
+                <li>{% block nav_how %}<a href="/how.html">How Does it Work?</a>{% endblock %}</li>
+                <li>{% block nav_blog %}<a href="http://blog.myeventbot.com">Blog</a>{% endblock %}</li>
+                <li>{% block nav_signup %}<a rel="nofollow" href="{{auth_link}}">Sign Up</a>{% endblock %}</li>
             </ul>
             {% block h1 %}{% endblock %}
             {% block content %}
