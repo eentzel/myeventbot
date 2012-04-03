@@ -62,3 +62,7 @@ builtins:
 
 inbound_services:
 - mail
+
+libraries:
+- name: jinja2
+  version: "2.6"

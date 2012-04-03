@@ -10,7 +10,7 @@ import string
 from google.appengine.api import app_identity
 from google.appengine.ext import db
 import webapp2
-from google.appengine.ext.webapp import template
+from webapp2_extras import jinja2
 
 import google_api
 import settings
@@ -114,11 +114,11 @@ class EcalRequestHandler(webapp2.RequestHandler):
             'auth_link': get_environment()['secure_base_url'] + '/authorize'
             }
 
+    @webapp2.cached_property
+    def jinja2(self):
+        return jinja2.get_jinja2(app=self.app)
+
     def respond_with_template(self, name, values):
-        # TODO: use posixpath.normalize() or some form of whitelisting
-        # see http://lucumr.pocoo.org/2010/12/24/common-mistakes-as-web-developer/
-        # unit test that 'GET /asdf/../foo.html' and similar return 404
-        full_path = os.path.join(os.path.dirname(__file__), 'templates', name)
         all_values = self.global_template_vals()
         all_values.update(values)
-        self.response.out.write(template.render(full_path, all_values))
+        self.response.write(self.jinja2.render_template(name, **all_values))
