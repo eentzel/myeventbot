@@ -9,7 +9,7 @@ import string
 
 from google.appengine.api import app_identity
 from google.appengine.ext import db
-from google.appengine.ext import webapp
+import webapp2
 from google.appengine.ext.webapp import template
 
 import google_api
@@ -94,13 +94,13 @@ class EcalStat(db.Model):
     value = db.IntegerProperty()
 
 
-class EcalWSGIApplication(webapp.WSGIApplication):
+class EcalWSGIApplication(webapp2.WSGIApplication):
     def __init__(self, url_mapping):
         debug = os.environ['SERVER_SOFTWARE'].startswith('Dev')
         super(EcalWSGIApplication, self).__init__(url_mapping, debug)
 
 
-class EcalRequestHandler(webapp.RequestHandler):
+class EcalRequestHandler(webapp2.RequestHandler):
     def canonical(self, path):
         if self.request.environ['SERVER_PORT'] == '443':
             server = get_environment()['secure_base_url']
