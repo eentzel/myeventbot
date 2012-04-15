@@ -51,7 +51,7 @@ def success(message, event):
         'title': event.title.text }
     when = event.FindExtensions(tag='when')
     if len(when) > 0:
-        template_vals['when'] = when[0].attributes['startTime']
+        template_vals['when'] = CreateEventHandler._format_date(when[0].attributes['startTime'])
     reply_with_logging(message, 'event_created', template_vals)
 
 
