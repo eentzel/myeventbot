@@ -59,6 +59,7 @@ skip_files:
 
 builtins:
 - remote_api: on
+- deferred: on
 
 inbound_services:
 - mail

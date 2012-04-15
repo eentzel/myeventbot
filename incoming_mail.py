@@ -5,6 +5,7 @@
 
 import ecal
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from google.appengine.ext.deferred import defer
 from google.appengine.api import mail
 from google.appengine.runtime import apiproxy_errors
 from gdata.service import RequestError
@@ -19,77 +20,45 @@ import string
 import pickle
 
 
-class FeedbackHandler(object):
-    """Abstract class to send email feedback to the user that their
-    event creation succeeded/failed.
-
-    Swallows all exceptions so that the HTTP request that GAE sends us
-    for incoming mail doesn't throw a 500 error -- if it did, GAE
-    would keep retrying and creating duplicate events.
-
-    Subclasses must implement a values() method and a template_name
-    attribute.  Subclasses can optionally implement a warning
-    attribute, which will be logged.
-    """
-    def send(self):
-        recipient = self.message.sender
-        if hasattr(self, 'warning'):
-            logging.warn(self.warning)
-            logging.info("Sender: " + recipient)
-            if hasattr(self.message, 'subject'):
-                logging.info("Subject: " + self.message.subject)
-        try:
-            outgoing_mail.reply_to(self.message, self.template_name, self.values())
-        except Exception:
-            logging.exception("unable to send email to %s using template %s" %
-                              (recipient, self.template_name))
+def reply_with_logging(message, template_name, values, warning=None):
+    if warning is not None:
+        logging.warn(warning)
+        logging.info("Sender: " + message.sender)
+        if hasattr(message, 'subject'):
+            logging.info("Subject: " + message.subject)
+    outgoing_mail.reply_to(message, template_name, values)
 
 
-class NoSubjectHandler(FeedbackHandler):
-    template_name = 'no_subject'
-    warning = "Couldn't create event because message had no subject"
-    def __init__(self, message):
-        self.message = message
-    def values(self):
-        return { 'original_body': self.message.body }
+def no_subject(message):
+    reply_with_logging(message,
+                       'no_subject',
+                       { 'original_body': message.body },
+                       "Couldn't create event because message had no subject")
 
 
-class NoSuchAddressHandler(FeedbackHandler):
-    template_name = 'no_such_address'
-    def __init__(self, message, adr):
-        self.message = message
-        self.adr = adr
-        self.warning = "Couldn't create event for user with address " + self.adr
-
-    def values(self):
-        return { 'address': self.adr,
-                 'subject': self.message.subject }
+def no_such_address(message, adr):
+    if not hasattr(message, 'subject'):
+        message.subject = ''
+    reply_with_logging(message,
+                       'no_such_address',
+                       { 'address': adr, 'subject': message.subject},
+                       "Couldn't create event for user with address " + adr)
 
 
-class SuccessHandler(FeedbackHandler):
-    template_name = 'event_created'
-    def __init__(self, message, event):
-        self.message = message
-        self.event = event
-
-    def values(self):
-        retval = { 'link': self.event.GetHtmlLink().href,
-                   'title': self.event.title.text }
-        when = self.event.FindExtensions(tag='when')
-        if len(when) > 0:
-            retval['when'] = when[0].attributes['startTime']
-        return retval
+def success(message, event):
+    template_vals = {
+        'link': event.GetHtmlLink().href,
+        'title': event.title.text }
+    when = event.FindExtensions(tag='when')
+    if len(when) > 0:
+        template_vals['when'] = when[0].attributes['startTime']
+    reply_with_logging(message, 'event_created', template_vals)
 
 
-class TokenRevokedHandler(FeedbackHandler):
-    template_name = 'token_revoked'
-    def __init__(self, message, adr):
-        self.message = message
-        self.adr = adr
-
-    def values(self):
-        return { 'address': self.adr,
-                 'subject': self.message.subject }
+def token_revoked(message, adr):
+    reply_with_logging(message,
+                       'token_revoked',
+                       { 'address': adr, 'subject': message.subject })
 
 
 class CreateEventHandler(InboundMailHandler):
@@ -149,10 +118,10 @@ class CreateEventHandler(InboundMailHandler):
     def receive(self, message):
         current_user = self._get_user()
         if current_user == None:
-            NoSuchAddressHandler(message, self._get_email_address()).send()
+            defer(no_such_address, message, self._get_email_address())
             return
         if not hasattr(message, 'subject') and current_user.send_emails:
-            NoSubjectHandler(message).send()
+            defer(no_subject, message)
             return
         token = current_user.auth_token
         message.subject = CreateEventHandler.header_to_utf8(message.subject)
@@ -168,7 +137,7 @@ class CreateEventHandler(InboundMailHandler):
                 # if there's anything obviously wrong with them?
                 logging.exception("Token doesn't appear to be valid anymore")
                 if current_user.send_emails:
-                    TokenRevokedHandler(message, self._get_email_address()).send()
+                    defer(token_revoked, message, self._get_email_address())
             else:
                 # Don't know what the error is, let's re-raise it so
                 # it gets logged and the message retried
@@ -182,7 +151,7 @@ class CreateEventHandler(InboundMailHandler):
             # EcalAction, so be it
             pass
         if current_user.send_emails:
-            SuccessHandler(message, event).send()
+            defer(success, message, event)
 
 
 app = ecal.EcalWSGIApplication([CreateEventHandler.mapping()])
