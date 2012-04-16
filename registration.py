@@ -16,7 +16,7 @@ class RegistrationHandler(ecal.EcalRequestHandler):
 
     def authorization_succeeded(self):
         session_token = google_api.permanent_token_from_temp_token(self.temp_token)
-        myuser = ecal.EcalUser(
+        myuser = ecal.EcalUser.new(
             auth_token=session_token.get_token_string(),
             google_account_id=users.get_current_user().user_id())
         try:

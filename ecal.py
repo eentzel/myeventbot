@@ -49,29 +49,35 @@ def load_rsa_key():
     return rsa_key
 
 
-class RandomAddressProperty(db.StringProperty):
-    def default_value(self):
-        """
-        Returns a random alphanumeric (lowercase) string of 9 digits.
-        Since there are 32 choices per digit (we exclude 'o', 'l', '0'
-        and '1' for readability), this gives:
-        32 ** 9 = 3.51843721 x 10 ** 13
+def random_address():
+    """
+    Returns a random alphanumeric (lowercase) string of 9 digits.
+    Since there are 32 choices per digit (we exclude 'o', 'l', '0'
+    and '1' for readability), this gives:
+    32 ** 9 = 3.51843721 x 10 ** 13
 
-        possible results.  When there are a million accounts active,
-        we need:
-        10 ** 6 x 10 ** 6 = 10 ** 12
+    possible results.  When there are a million accounts active,
+    we need:
+    10 ** 6 x 10 ** 6 = 10 ** 12
 
-        possible results to have a one-in-a-million chance of a
-        collision, so this seems like a safe number.
-        """
-        chars = string.lowercase + string.digits
-        chars = chars.translate(string.maketrans('', ''), 'ol01')
-        return ''.join([ random.choice(chars) for _ in range(9) ])
+    possible results to have a one-in-a-million chance of a
+    collision, so this seems like a safe number.
+    """
+    chars = string.lowercase + string.digits
+    chars = chars.translate(string.maketrans('', ''), 'ol01')
+    return ''.join([ random.choice(chars) for _ in range(9) ])
 
 
 class EcalUser(db.Model):
+    @classmethod
+    def new(cls, **kwargs):
+        adr = random_address()
+        kwargs['key_name'] = adr
+        kwargs['email_address'] = adr
+        return cls(**kwargs)
+
     # the email address that the user sends events to:
-    email_address = RandomAddressProperty()
+    email_address = db.StringProperty()
     # the AuthSub token used to authenticate the user to gcal:
     auth_token = db.StringProperty()
     date_added = db.DateTimeProperty(auto_now_add=True)

@@ -8,8 +8,8 @@ import settings
 
 class MakeAddress(unittest.TestCase):
     def testModel(self):
-        user1 = ecal.EcalUser()
-        user2 = ecal.EcalUser()
+        user1 = ecal.EcalUser.new()
+        user2 = ecal.EcalUser.new()
         self.assertNotEqual(user1.email_address, user2.email_address)
 
 
