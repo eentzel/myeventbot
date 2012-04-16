@@ -120,8 +120,9 @@ class CreateEventHandler(InboundMailHandler):
         if current_user == None:
             defer(no_such_address, message, self._get_email_address())
             return
-        if not hasattr(message, 'subject') and current_user.send_emails:
-            defer(no_subject, message)
+        if not hasattr(message, 'subject'):
+            if current_user.send_emails:
+                defer(no_subject, message)
             return
         token = current_user.auth_token
         message.subject = CreateEventHandler.header_to_utf8(message.subject)
