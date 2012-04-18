@@ -61,6 +61,11 @@ def token_revoked(message, adr):
                        { 'address': adr, 'subject': message.subject })
 
 
+def update_stats(user_key):
+    action = ecal.EcalAction(type="event_created", user=user_key)
+    action.put()
+
+
 class CreateEventHandler(InboundMailHandler):
     # self.request.path will contain something like:
     # /_ah/mail/f832ofhAau%40myeventbot.appspotmail.com
@@ -144,15 +149,12 @@ class CreateEventHandler(InboundMailHandler):
                 # it gets logged and the message retried
                 raise
             return
-        try:
-            action = ecal.EcalAction(type="event_created", user=current_user)
-            action.put()
-        except apiproxy_errors.CapabilityDisabledError:
-            # The event's already been created, if we can't record the
-            # EcalAction, so be it
-            pass
-        if current_user.send_emails:
-            defer(success, message, event)
+        else:
+            logging.info(update_stats)
+            logging.info(current_user.key())
+            defer(update_stats, current_user.key())
+            if current_user.send_emails:
+                defer(success, message, event)
 
 
 app = ecal.EcalWSGIApplication([CreateEventHandler.mapping()])
