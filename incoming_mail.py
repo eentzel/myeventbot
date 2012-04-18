@@ -150,8 +150,6 @@ class CreateEventHandler(InboundMailHandler):
                 raise
             return
         else:
-            logging.info(update_stats)
-            logging.info(current_user.key())
             defer(update_stats, current_user.key())
             if current_user.send_emails:
                 defer(success, message, event)
