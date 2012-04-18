@@ -1,7 +1,7 @@
 application: myeventbot-hrd
 version: testing
 runtime: python27
-threadsafe: no
+threadsafe: true
 api_version: 1
 
 default_expiration: "4h"
