@@ -62,14 +62,14 @@ def token_revoked(message, adr):
                        { 'address': adr, 'subject': message.subject })
 
 
-def update_stats(user_key):
+def update_stats(user_key, email_adr):
     # counters wanted:
     #     - events created / day over the whole system
     #     - events created / day per user, so we can get the top N users (maybe for send_emails T/F separately?)
     #     - last action by this user
     # https://developers.google.com/appengine/docs/python/datastore/queries
     counter.load_and_increment_counter(
-        'event_created_' + user_key.name(),
+        'event_created_' + email_adr,
         period_types=[counter.PeriodType.DAY, counter.PeriodType.WEEK])
     counter.load_and_increment_counter(
         'event_created',
@@ -162,7 +162,7 @@ class CreateEventHandler(InboundMailHandler):
                 raise
             return
         else:
-            defer(update_stats, current_user.key())
+            defer(update_stats, current_user.key(), self._get_email_address())
             if current_user.send_emails:
                 defer(success, message, event)
 
