@@ -3,6 +3,7 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 
+from livecount import counter
 import ecal
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.ext.deferred import defer
@@ -62,6 +63,17 @@ def token_revoked(message, adr):
 
 
 def update_stats(user_key):
+    # counters wanted:
+    #     - events created / day over the whole system
+    #     - events created / day per user, so we can get the top N users (maybe for send_emails T/F separately?)
+    #     - last action by this user
+    # https://developers.google.com/appengine/docs/python/datastore/queries
+    counter.load_and_increment_counter(
+        'event_created_' + user_key.name(),
+        period_types=[counter.PeriodType.DAY, counter.PeriodType.WEEK])
+    counter.load_and_increment_counter(
+        'event_created',
+        period_types=[counter.PeriodType.DAY, counter.PeriodType.WEEK])
     action = ecal.EcalAction(type="event_created", user=user_key)
     action.put()
 

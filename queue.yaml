@@ -1,0 +1,4 @@
+queue:
+- name: livecount-writebacks
+  rate: 10/s
+  bucket_size: 20

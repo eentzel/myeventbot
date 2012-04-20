@@ -39,6 +39,9 @@ handlers:
 - url: /update_stats
   script: update_stats.app
   login: admin
+- url: /livecount/.*
+  script: livecount.counter.application
+  login: admin
 
 admin_console:
   pages:
