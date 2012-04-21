@@ -3,11 +3,11 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 import datetime
-import itertools
-import time
 
 from google.appengine.api import logservice
+from google.appengine.ext import db
 
+from livecount import counter
 import ecal
 import rest
 
@@ -27,32 +27,27 @@ def fst(t):
 def iterlen(i):
     return len(list(i))
 
-def top_30_users(logs):
-    users = sorted((l.resource.replace('/_ah/mail/', ''), 1)
-                   for l in logs
-                   if l.resource.startswith('/_ah/mail/'))
-    return sorted([(iterlen(group), key) for key, group in
-                   itertools.groupby(users, fst)],
-                  reverse=True)[:30]
-
 
 class HeavyUsersHandler(ecal.EcalRequestHandler):
     def get(self):
-        start_time = time.time() - 24 * 60 * 60
-        counts = top_30_users(logservice.fetch(start_time=start_time))
-        query = ecal.EcalUser.gql("WHERE email_address in :e",
-                                  e=[c[1].split("@")[0] for c in counts])
-        user_records = query.fetch(30)
+        day = counter.PeriodType.find_scope(counter.PeriodType.DAY, datetime.datetime.now())
+        q = counter.LivecountCounter.all()
+        q.filter('namespace = ', 'top_users_' + day)
+        q.order('-count')
+        counts = q.fetch(limit=30)
+
+        keys = [db.Key.from_path('EcalUser', c.name) for c in counts]
+        user_records = db.get(keys)
+
         template_vals = {
             'users': [{
-                    'count': count,
-                    'email': email.split("@")[0],
-                    'send_confirmation': rec.send_emails,
+                    'count': c.count,
+                    'email': c.name,
+                    'send_confirmation': u.send_emails,
                     'toggle_url': '/admin/rest/user/%s/send_emails' % (
-                        rec.key())
+                        u.key())
                     }
-                      for ((count, email), rec)
-                      in zip(counts, user_records)]
+                      for c, u in zip(counts, user_records)]
             }
         self.respond_with_template('heavy_users.html', template_vals)
 

@@ -20,3 +20,9 @@ indexes:
   - name: type
   - name: day
     direction: desc
+
+- kind: LivecountCounter
+  properties:
+  - name: namespace
+  - name: count
+    direction: desc
