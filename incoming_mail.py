@@ -68,14 +68,14 @@ def update_stats(user_key, email_adr):
     #     - events created / day per user, so we can get the top N users (maybe for send_emails T/F separately?)
     #     - last action by this user
     # https://developers.google.com/appengine/docs/python/datastore/queries
+    day = counter.PeriodType.find_scope(counter.PeriodType.DAY, datetime.now())
     counter.load_and_increment_counter(
-        'event_created_' + email_adr,
-        period_types=[counter.PeriodType.DAY, counter.PeriodType.WEEK])
+        email_adr,
+        namespace='top_users_' + day,
+        period_types=[counter.PeriodType.DAY])
     counter.load_and_increment_counter(
         'event_created',
         period_types=[counter.PeriodType.DAY, counter.PeriodType.WEEK])
-    action = ecal.EcalAction(type="event_created", user=user_key)
-    action.put()
 
 
 class CreateEventHandler(InboundMailHandler):
@@ -162,7 +162,7 @@ class CreateEventHandler(InboundMailHandler):
                 raise
             return
         else:
-            defer(update_stats, current_user.key(), self._get_email_address())
+            defer(update_stats, current_user.key(), self._get_email_address().split('@')[0])
             if current_user.send_emails:
                 defer(success, message, event)
 
