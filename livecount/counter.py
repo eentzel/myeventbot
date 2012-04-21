@@ -214,7 +214,6 @@ class RedirectToCounterAdminHandler(webapp.RequestHandler):
         self.redirect('/livecount/counter_admin')
 
 
-logging.getLogger().setLevel(logging.DEBUG)
 application = webapp.WSGIApplication([
         ('/livecount/worker', LivecountCounterWorker),
         ('/livecount/writeback_all_counters', WritebackAllCountersHandler),
