@@ -162,7 +162,7 @@ class CreateEventHandler(InboundMailHandler):
                 raise
             return
         else:
-            defer(update_stats, current_user.key(), self._get_email_address().split('@')[0])
+            update_stats(current_user.key(), self._get_email_address().split('@')[0])
             if current_user.send_emails:
                 defer(success, message, event)
 
