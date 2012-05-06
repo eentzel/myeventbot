@@ -3,6 +3,7 @@
 # Copyright 2010 Eric Entzel <eric@ubermac.net>
 #
 import datetime
+import logging
 
 from google.appengine.api import logservice
 from google.appengine.ext import db
@@ -41,9 +42,12 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         # user_records = db.get(keys)
 
         # So this way will have to work for now:
+        names = [c.name for c in counts]
+        logging.info(names)
         query = ecal.EcalUser.gql("WHERE email_address in :e",
-                                  e=[c.name for c in counts])
+                                  e=names)
         user_records = query.fetch(30)
+        logging.info([u.email_address for u in user_records])
 
         template_vals = {
             'users': [{
