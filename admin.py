@@ -36,8 +36,14 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         q.order('-count')
         counts = q.fetch(limit=30)
 
-        keys = [db.Key.from_path('EcalUser', c.name) for c in counts]
-        user_records = db.get(keys)
+        # This would be the preferred way, but won't work until every user has key=email:
+        # keys = [db.Key.from_path('EcalUser', c.name) for c in counts]
+        # user_records = db.get(keys)
+
+        # So this way will have to work for now:
+        query = ecal.EcalUser.gql("WHERE email_address in :e",
+                                  e=[c.name for c in counts])
+        user_records = query.fetch(30)
 
         template_vals = {
             'users': [{
