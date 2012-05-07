@@ -69,7 +69,11 @@ try:
 except ImportError:    
     from django.utils import simplejson as json
 
-from google.appengine.ext import webapp
+# compatibility w/ python27 & webapp2
+try:
+    import webapp2 as webapp
+except ImportError:
+    from google.appengine.ext import webapp
 
 
 def get_instance_type_name(value):
