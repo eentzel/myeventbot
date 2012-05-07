@@ -35,7 +35,7 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         q = counter.LivecountCounter.all()
         q.filter('namespace = ', 'top_users_' + day)
         q.order('-count')
-        counts = q.fetch(limit=30)
+        counts = sorted(q.fetch(limit=30), key=lambda x: x.name)
 
         # This would be the preferred way, but won't work until every user has key=email:
         # keys = [db.Key.from_path('EcalUser', c.name) for c in counts]
@@ -46,7 +46,7 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         logging.info(names)
         query = ecal.EcalUser.gql("WHERE email_address in :e",
                                   e=names)
-        user_records = query.fetch(30)
+        user_records = sorted(query.fetch(30), key=lambda x: x.email_address)
         logging.info([u.email_address for u in user_records])
 
         template_vals = {
