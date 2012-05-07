@@ -43,8 +43,7 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
 
         # So this way will have to work for now:
         names = [c.name for c in counts]
-        query = ecal.EcalUser.gql("WHERE email_address in :e",
-                                  e=names)
+        query = ecal.EcalUser.gql("WHERE email_address in :e",e=names)
         user_records = sorted(query.fetch(30), key=lambda x: x.email_address)
 
         template_vals = {
@@ -56,8 +55,7 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
                     'toggle_url': '/admin/rest/user/%s/send_emails' % (u.key())
                     }
                 for c, u in sorted(zip(counts, user_records),
-                                   key=lambda x: x[0].count, reverse=True)]
-            }
+                                   key=lambda x: x[0].count, reverse=True)]}
         self.respond_with_template('heavy_users.html', template_vals)
 
 
