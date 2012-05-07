@@ -50,14 +50,14 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         logging.info([u.email_address for u in user_records])
 
         template_vals = {
-            'users': [{
+            'users': [
+                {
                     'count': c.count,
                     'email': c.name,
                     'send_confirmation': u.send_emails,
-                    'toggle_url': '/admin/rest/user/%s/send_emails' % (
-                        u.key())
+                    'toggle_url': '/admin/rest/user/%s/send_emails' % (u.key())
                     }
-                      for c, u in zip(counts, user_records)]
+                for c, u in zip(counts, user_records)]
             }
         self.respond_with_template('heavy_users.html', template_vals)
 
