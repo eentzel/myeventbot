@@ -15,6 +15,9 @@ email_interval = 10
 
 
 # TODO: the memcache rate-limiting part of this might make a nice decorator
+
+# TODO: swallow over quota exception so tasks don't back up
+
 def send(to, template_name, values, extra_headers=None):
     """Send an email to the specified address using a template.  No
     more than one email per EMAIL_INTERVAL seconds will be sent to any
