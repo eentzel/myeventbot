@@ -76,6 +76,7 @@ class EcalUser(db.Model):
         kwargs['email_address'] = adr
         return cls(**kwargs)
 
+    schema_version = db.IntegerProperty()
     # the email address that the user sends events to:
     email_address = db.StringProperty()
     # the AuthSub token used to authenticate the user to gcal:
