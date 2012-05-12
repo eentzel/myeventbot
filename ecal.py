@@ -72,6 +72,7 @@ class EcalUser(db.Model):
     @classmethod
     def new(cls, **kwargs):
         adr = random_address()
+        kwargs['schema_version'] = 2
         kwargs['key_name'] = adr
         kwargs['email_address'] = adr
         return cls(**kwargs)
