@@ -3,6 +3,8 @@ import ecal
 import logging
 
 
+# Use http://blog.notdot.net/2010/05/Exploring-the-new-mapper-API to add schema_version=1 first
+
 @db.transactional(xg=True)
 def update_one_user(u):
     """Given an old EcalUser (schema version < 2), replace it with a new
