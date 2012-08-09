@@ -30,7 +30,7 @@ then
 fi
 
 echo "Compiling .less files"
-for i in static/*less ; do lessc $i ; done
+for i in static/*less ; do lessc $i > `echo $i | sed 's/less\$/css/'` ; done
 
 echo "Generating version.txt"
 git rev-parse --verify HEAD > version.txt
