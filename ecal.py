@@ -86,7 +86,7 @@ class EcalUser(db.Model):
     last_action = db.DateTimeProperty()
     google_account = db.UserProperty(auto_current_user_add=True)
     google_account_id = db.StringProperty()
-    send_emails = db.BooleanProperty(default=True)
+    send_emails = db.BooleanProperty(default=False)
 
 
 class EcalAction(db.Model):

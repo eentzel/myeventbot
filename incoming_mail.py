@@ -135,7 +135,6 @@ class CreateEventHandler(InboundMailHandler):
     def receive(self, message):
         current_user = self._get_user()
         if current_user == None:
-            defer(no_such_address, message, self._get_email_address())
             return
         if not hasattr(message, 'subject'):
             if current_user.send_emails:
@@ -162,9 +161,12 @@ class CreateEventHandler(InboundMailHandler):
                 raise
             return
         else:
-            update_stats(current_user.key(), self._get_email_address().split('@')[0])
-            if current_user.send_emails:
-                defer(success, message, event)
+            try:
+                update_stats(current_user.key(), self._get_email_address().split('@')[0])
+                if current_user.send_emails:
+                    defer(success, message, event)
+            except:
+                return
 
 
 app = ecal.EcalWSGIApplication([CreateEventHandler.mapping()])
