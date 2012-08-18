@@ -88,7 +88,10 @@ class LivecountCounter(db.Model):
         return period_type + ":" + scoped_period + ":" + name
 
 
-def load_and_get_count(name, namespace='default', period_type='all', period=datetime.now()):
+def load_and_get_count(name, namespace='default', period_type='all', period=None):
+    if period is None:
+        period = datetime.now()
+
     # Try memcache first
     partial_key = LivecountCounter.PartialKeyName(period_type, period, name)
     count =  memcache.get(partial_key, namespace=namespace) 
@@ -106,7 +109,7 @@ def load_and_get_count(name, namespace='default', period_type='all', period=date
     return count
 
 
-def load_and_increment_counter(name, period=datetime.now(), period_types=[PeriodType.ALL], namespace='default', delta=1, batch_size=None):
+def load_and_increment_counter(name, period=None, period_types=[PeriodType.ALL], namespace='default', delta=1, batch_size=None):
     """
     Setting batch size allows control of how often a writeback worker is created.
     By default, this happens at every increment to ensure maximum durability.
@@ -115,7 +118,9 @@ def load_and_increment_counter(name, period=datetime.now(), period_types=[Period
     # Warning: There is a race condition here. If two processes try to load
     # the same value from the datastore, one's update may be lost.
     # TODO: Think more about whether we care about this...
-    
+    if period is None:
+        period = datetime.now()
+
     for period_type in period_types:
         current_count = None
         
@@ -150,7 +155,7 @@ def load_and_increment_counter(name, period=datetime.now(), period_types=[Period
                 taskqueue.add(queue_name='livecount-writebacks', url='/livecount/worker', params={'name': name, 'period': period, 'period_type': period_type, 'namespace': namespace}) # post parameter
 
 
-def load_and_decrement_counter(name, period=datetime.now(), period_types=[PeriodType.ALL], namespace='default', delta=1, batch_size=None):
+def load_and_decrement_counter(name, period=None, period_types=[PeriodType.ALL], namespace='default', delta=1, batch_size=None):
     load_and_increment_counter(name, period, period_types, namespace, -delta, batch_size)
 
     
