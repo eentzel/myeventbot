@@ -158,6 +158,10 @@ class CreateEventHandler(InboundMailHandler):
             else:
                 # Don't know what the error is, let's re-raise it so
                 # it gets logged and the message retried
+                if 'X-AppEngine-TaskRetryCount' in self.request.headers:
+                    logging.warn("Retry count is " + self.request.headers['X-AppEngine-TaskRetryCount'])
+                else:
+                    logging.warn("No X-AppEngine-TaskRetryCount")
                 raise
             return
         else:
