@@ -42,11 +42,11 @@ def update_one_user(u):
 
 class MigrationHandler(ecal.EcalRequestHandler):
     def get(self):
-        u = ecal.EcalUser.all().filter('schema_version !=', 2).get()
-        if u is None:
-            logging.info('no users suitable for migration')
-            return
-        update_one_user(u)
+        for u in ecal.EcalUser.all().filter('schema_version !=', 2).run(limit=50):
+            if u is None:
+                logging.info('no users suitable for migration')
+                return
+            update_one_user(u)
 
 
-app = ecal.EcalWSGIApplication([('/migrate_one_user', MigrationHandler)])
+app = ecal.EcalWSGIApplication([('/migrate_fifty_users', MigrationHandler)])

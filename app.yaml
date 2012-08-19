@@ -45,7 +45,7 @@ handlers:
 - url: /mapreduce(/.*)?
   script: mapreduce.main.APP
   login: admin
-- url: /migrate_one_user
+- url: /migrate_fifty_users
   script: migrate_users.app
   login: admin
 
