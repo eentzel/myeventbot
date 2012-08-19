@@ -1,4 +1,6 @@
+from google.appengine.api import taskqueue
 from google.appengine.ext import db
+from google.appengine.runtime import apiproxy_errors
 import ecal
 import logging
 
@@ -42,11 +44,18 @@ def update_one_user(u):
 
 class MigrationHandler(ecal.EcalRequestHandler):
     def get(self):
-        for u in ecal.EcalUser.all().filter('schema_version !=', 2).run(limit=50):
-            if u is None:
-                logging.info('no users suitable for migration')
-                return
-            update_one_user(u)
+        done = True
+        try:
+            for u in ecal.EcalUser.all().filter('schema_version !=', 2).run(limit=50):
+                update_one_user(u)
+                done = False
+        except apiproxy_errors.OverQuotaError, message:
+            logging.exception(message)
+        else:
+            if not done:
+                taskqueue.add(url='/migrate_fifty_users')
+        if done:
+            logging.info('Migration complete')
 
 
 app = ecal.EcalWSGIApplication([('/migrate_fifty_users', MigrationHandler)])
