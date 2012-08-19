@@ -8,7 +8,7 @@ from mapreduce import operation as op
 
 
 def set_schema1(entity):
-    if not has_attr(entity, 'schema_version'):
+    if not hasattr(entity, 'schema_version'):
         entity.schema_version = 1
         yield op.db.Put(entity)
 
