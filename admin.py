@@ -31,7 +31,10 @@ def iterlen(i):
 
 class HeavyUsersHandler(ecal.EcalRequestHandler):
     def get(self):
-        day = counter.PeriodType.find_scope(counter.PeriodType.DAY, datetime.datetime.now())
+        if 'day' in self.request.GET:
+            day = self.request.GET['day']
+        else:
+            day= str(datetime.datetime.now())[0:10]
         q = counter.LivecountCounter.all()
         q.filter('namespace = ', 'top_users_' + day)
         q.order('-count')
