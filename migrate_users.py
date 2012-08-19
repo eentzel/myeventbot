@@ -51,9 +51,6 @@ class MigrationHandler(ecal.EcalRequestHandler):
                 done = False
         except apiproxy_errors.OverQuotaError, message:
             logging.exception(message)
-        else:
-            if not done:
-                taskqueue.add(url='/migrate_fifty_users')
         if done:
             logging.info('Migration complete')
 
