@@ -11,6 +11,9 @@ def set_schema1(entity):
     if not hasattr(entity, 'schema_version'):
         entity.schema_version = 1
         yield op.db.Put(entity)
+    else:
+        logging.info("skipping " + entity.key())
+        logging.info("already has schema_version=" + entity.schema_version)
 
 
 
