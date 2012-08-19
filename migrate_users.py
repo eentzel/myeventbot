@@ -12,8 +12,8 @@ def set_schema1(entity):
         entity.schema_version = 1
         yield op.db.Put(entity)
     else:
-        logging.info("skipping " + entity.key())
-        logging.info("already has schema_version=" + entity.schema_version)
+        logging.info("skipping " + str(entity.key()))
+        logging.info("already has schema_version=" + str(entity.schema_version))
 
 
 
