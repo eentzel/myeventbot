@@ -4,6 +4,15 @@ import logging
 
 
 # Use http://blog.notdot.net/2010/05/Exploring-the-new-mapper-API to add schema_version=1 first
+from mapreduce import operation as op
+
+
+def set_schema1(entity):
+    if not has_attr(entity, 'schema_version'):
+        entity.schema_version = 1
+        yield op.db.Put(entity)
+
+
 
 @db.transactional(xg=True)
 def update_one_user(u):

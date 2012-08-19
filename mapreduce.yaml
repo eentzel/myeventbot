@@ -1,0 +1,8 @@
+mapreduce:
+- name: Give all EcalUsers with no schema_version, schema_version=1
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreInputReader
+    handler: migrate_users.set_schema1
+    params:
+    - name: entity_kind
+      default: ecal.EcalUser
