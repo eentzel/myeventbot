@@ -40,14 +40,8 @@ class HeavyUsersHandler(ecal.EcalRequestHandler):
         q.order('-count')
         counts = sorted(q.fetch(limit=30), key=lambda x: x.name)
 
-        # This would be the preferred way, but won't work until every user has key=email:
-        # keys = [db.Key.from_path('EcalUser', c.name) for c in counts]
-        # user_records = db.get(keys)
-
-        # So this way will have to work for now:
-        names = [c.name for c in counts]
-        query = ecal.EcalUser.gql("WHERE email_address in :e",e=names)
-        user_records = sorted(query.fetch(30), key=lambda x: x.email_address)
+        user_records = ecal.EcalUser.get_by_key_name([c.name for c in counts])
+        user_records.sort(key=lambda x: x.email_address)
 
         template_vals = {
             'users': [
