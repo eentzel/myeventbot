@@ -85,10 +85,8 @@ class CreateEventHandler(InboundMailHandler):
         decoded_path = urllib.unquote(self.request.path)
         return decoded_path.replace('/_ah/mail/', '')
 
-    def _get_user(self):
-        local_part = self._get_email_address().split('@')[0]
-        query = ecal.EcalUser.gql("WHERE email_address = :email", email=local_part)
-        return query.get()
+    def _get_local_part(self):
+        return self._get_email_address().split('@')[0]
 
     @staticmethod
     def _format_date(str):
@@ -133,7 +131,7 @@ class CreateEventHandler(InboundMailHandler):
         self.receive(mail.InboundEmailMessage(new_body))
 
     def receive(self, message):
-        current_user = self._get_user()
+        current_user = ecal.EcalUser.get_by_key_name(self._get_local_part())
         if current_user == None:
             return
         if not hasattr(message, 'subject'):
@@ -166,7 +164,7 @@ class CreateEventHandler(InboundMailHandler):
             return
         else:
             try:
-                update_stats(current_user.key(), self._get_email_address().split('@')[0])
+                update_stats(current_user.key(), self._get_local_part())
                 if current_user.send_emails:
                     defer(success, message, event)
             except:
