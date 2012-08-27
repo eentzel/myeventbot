@@ -33,7 +33,7 @@ def reply_with_logging(message, template_name, values, warning=None):
 def no_subject(message):
     reply_with_logging(message,
                        'no_subject',
-                       { 'original_body': message.body },
+                       {'original_body': message.body},
                        "Couldn't create event because message had no subject")
 
 
@@ -42,30 +42,32 @@ def no_such_address(message, adr):
         message.subject = ''
     reply_with_logging(message,
                        'no_such_address',
-                       { 'address': adr, 'subject': message.subject},
+                       {'address': adr, 'subject': message.subject},
                        "Couldn't create event for user with address " + adr)
 
 
 def success(message, event):
     template_vals = {
         'link': event.GetHtmlLink().href,
-        'title': event.title.text }
+        'title': event.title.text}
     when = event.FindExtensions(tag='when')
     if len(when) > 0:
-        template_vals['when'] = CreateEventHandler._format_date(when[0].attributes['startTime'])
+        template_vals['when'] = CreateEventHandler._format_date(
+            when[0].attributes['startTime'])
     reply_with_logging(message, 'event_created', template_vals)
 
 
 def token_revoked(message, adr):
     reply_with_logging(message,
                        'token_revoked',
-                       { 'address': adr, 'subject': message.subject })
+                       {'address': adr, 'subject': message.subject})
 
 
 def update_stats(user_key, email_adr):
     # counters wanted:
     #     - events created / day over the whole system
-    #     - events created / day per user, so we can get the top N users (maybe for send_emails T/F separately?)
+    #     - events created / day per user, so we can get the top
+    #       N users (maybe for send_emails T/F separately?)
     #     - last action by this user
     # https://developers.google.com/appengine/docs/python/datastore/queries
     day = counter.PeriodType.find_scope(counter.PeriodType.DAY, datetime.now())
@@ -107,16 +109,20 @@ class CreateEventHandler(InboundMailHandler):
         """It appears that GAE does not decode rfc2047-encoded headers
         for us, so we have to do it manually.  Up to three steps may
         be needed:
-            1) quoted-printable or base64 decoding, performed by decode_header()
-            2) character set (e.g., utf-8 or iso-8859-1) decoding, performed by decode()
+            1) quoted-printable or base64 decoding, performed by
+               decode_header()
+            2) character set (e.g., utf-8 or iso-8859-1) decoding, performed
+               by decode()
             3) conversion into UTF-8, performed by encode()
         """
         try:
             parts = decode_header(header)
-            decoded = [value.decode(charset or default) for value, charset in parts]
+            decoded = [value.decode(charset or default)
+                       for value, charset in parts]
             return u"".join(decoded).encode('utf-8')
         except UnicodeDecodeError, _:
-            logging.exception("Couldn't decode header: " + pickle.dumps(header))
+            logging.exception("Couldn't decode header: " +
+                              pickle.dumps(header))
 
     @staticmethod
     def strip_bcc(body):
