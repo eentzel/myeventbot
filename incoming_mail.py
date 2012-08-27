@@ -150,6 +150,10 @@ class CreateEventHandler(InboundMailHandler):
                 # HTTP 401 response "Unknown authorization header".
                 # Can we log the headers of the POST we sent, to see
                 # if there's anything obviously wrong with them?
+
+                # This may be too much logging...
+                logging.exception(err)
+
                 logging.exception("Token doesn't appear to be valid anymore")
                 if current_user.send_emails:
                     defer(token_revoked, message, self._get_email_address())
