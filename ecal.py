@@ -81,7 +81,7 @@ class EcalUser(db.Model):
     # the email address that the user sends events to:
     email_address = db.StringProperty()
     # the AuthSub token used to authenticate the user to gcal:
-    auth_token = db.StringProperty()
+    auth_token = db.StringProperty() # TODO: add indexed=False ?
     date_added = db.DateTimeProperty(auto_now_add=True)
     last_action = db.DateTimeProperty()
     google_account = db.UserProperty(auto_current_user_add=True)
