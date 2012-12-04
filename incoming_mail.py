@@ -140,7 +140,7 @@ class CreateEventHandler(InboundMailHandler):
         current_user = ecal.EcalUser.get_by_key_name(self._get_local_part())
         if current_user == None:
             return
-        if not hasattr(message, 'subject'):
+        if not hasattr(message, 'subject') or message.subject.strip() == '':
             if current_user.send_emails:
                 defer(no_subject, message)
             return
