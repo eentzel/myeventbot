@@ -79,6 +79,8 @@ class DashboardHandler(ecal.EcalRequestHandler):
     def format_day(day):
         return '<span class="month">%s</span><span class="day">%d</span>' % (day.strftime('%b'), day.day)
 
+    # SELECT * FROM LivecountCounter WHERE __key__=Key('LivecountCounter', 'default:day:2012-08-19:event_created')
+
     def get(self):
         today_start = datetime.datetime.today().replace(hour=0, minute=0,
                                                         second=0, microsecond=0)
