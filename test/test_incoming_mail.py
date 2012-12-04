@@ -17,12 +17,12 @@ class GetUser(unittest.TestCase):
     def setUp(self):
         self.evt_handler = CreateEventHandler()
         self.evt_handler.initialize(MockRequest(''), None)
-        test_user = EcalUser(email_address='test_user')
+        test_user = EcalUser(email_address='test_user', key_name='test_user')
         test_user.put()
 
     def testValidUser(self):
         self.evt_handler.request.path = '/_ah/mail/test_user%40myeventbot.appspotmail.com'
-        result = self.evt_handler._get_user()
+        result = EcalUser.get_by_key_name(self.evt_handler._get_local_part())
         self.assertEqual(result.email_address, 'test_user')
         self.assertTrue(hasattr(result, 'auth_token'))
         self.assertTrue(hasattr(result, 'date_added'))
@@ -30,7 +30,7 @@ class GetUser(unittest.TestCase):
 
     def testNonExistentUser(self):
         self.evt_handler.request.path = '/_ah/mail/non_existent_user%40myeventbot.appspotmail.com'
-        result = self.evt_handler._get_user()
+        result = EcalUser.get_by_key_name(self.evt_handler._get_local_part())
         self.assertEqual(result, None)
 
 
