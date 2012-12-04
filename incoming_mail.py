@@ -145,7 +145,7 @@ class CreateEventHandler(InboundMailHandler):
                 defer(no_subject, message)
             return
         token = current_user.auth_token
-        message.subject = CreateEventHandler.header_to_utf8(message.subject)
+        # message.subject = CreateEventHandler.header_to_utf8(message.subject)
         logging.info("Decoded Subject: " + message.subject)
         # TODO: everything after this point should move into a task queue
         try:
