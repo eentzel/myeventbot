@@ -57,7 +57,7 @@ def quickadd_event_using_token(event, token_str):
                   <entry xmlns='http://www.w3.org/2005/Atom' xmlns:gCal='http://schemas.google.com/gCal/2005'>
                       <content type="html">%s</content>
                       <gCal:quickadd value="true"/>
-                  </entry>""" % escape(event)
+                  </entry>""" % escape(event.encode('utf-8'))
     # TODO: might be over-escaping - '&' in email subject
     # shows up as '&amp;' in event titles
     return client.Post(xml_data, GCAL_FEED)
