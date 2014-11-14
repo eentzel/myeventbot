@@ -132,6 +132,5 @@ class EcalRequestHandler(webapp2.RequestHandler):
 
     def respond_with_template(self, name, values):
         all_values = self.global_template_vals()
-        all_values.update(values)
         template = JINJA_ENVIRONMENT.get_template(name)
-        self.response.write(template.render(values))
+        self.response.write(template.render(dict(all_values.items() + values.items())))
