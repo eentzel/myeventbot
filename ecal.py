@@ -9,8 +9,8 @@ import string
 
 from google.appengine.api import app_identity
 from google.appengine.ext import db
+import jinja2
 import webapp2
-from webapp2_extras import jinja2
 
 import settings
 
@@ -18,6 +18,11 @@ import settings
 # Constant for datstore queries:
 LOTS_OF_RESULTS = 999999
 
+TEMPLATE_PATH=os.path.join(os.path.dirname(__file__), "templates")
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(TEMPLATE_PATH),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
 
 # TODO: @memoize
 def get_environment(version=None):
@@ -128,4 +133,5 @@ class EcalRequestHandler(webapp2.RequestHandler):
     def respond_with_template(self, name, values):
         all_values = self.global_template_vals()
         all_values.update(values)
-        self.response.write(self.jinja2.render_template(name, **all_values))
+        template = JINJA_ENVIRONMENT.get_template(name)
+        self.response.write(template.render(values))
