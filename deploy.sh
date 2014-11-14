@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Check that all dependencies are available:
-dependencies='git sed lessc appcfg.py'
+LESSC=./node_modules/.bin/lessc
+dependencies="git sed $LESSC appcfg.py"
 for binary in $dependencies; do
     if [ -z `which $binary` ]; then
         echo "Required binary '$binary' was not found in \$PATH:"
@@ -30,7 +31,7 @@ then
 fi
 
 echo "Compiling .less files"
-for i in static/*less ; do lessc $i > `echo $i | sed 's/less\$/css/'` ; done
+for i in static/*less ; do $LESSC $i > `echo $i | sed 's/less\$/css/'` ; done
 
 echo "Generating version.txt"
 git rev-parse --verify HEAD > version.txt
