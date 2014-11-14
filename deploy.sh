@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Check that all dependencies are available:
 LESSC=./node_modules/.bin/lessc
 dependencies="git sed $LESSC appcfg.py"
