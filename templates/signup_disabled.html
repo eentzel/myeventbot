@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Signup is disabled{% endblock %}
+{% block h1 %}<h1>Sorry, signup is disabled at the moment</h1>{% endblock %}
+{% block nav_signup %}<span class="active">Sign Up</span>{% endblock %}
+
+
+{% block content %}
+
+<p>Sorry, due to an API change on Google's end (v2 reaching 
+<a href="https://developers.google.com/google-apps/calendar/v2/developers_guide_protocol">end
+of life</a>), signups are disabled until I'm able to get EventBot updated. Sorry for the inconvenience.</p>
+
+{% endblock %}

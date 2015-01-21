@@ -123,7 +123,7 @@ class EcalRequestHandler(webapp2.RequestHandler):
     def global_template_vals(self):
         return {
             'canonical': self.canonical(self.request.path),
-            'auth_link': get_environment()['secure_base_url'] + '/authorize'
+            'auth_link': '/signup_disabled.html'
             }
 
     @webapp2.cached_property
